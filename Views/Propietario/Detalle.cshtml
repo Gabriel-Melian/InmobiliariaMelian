@@ -1,0 +1,101 @@
+@model net.Models.Propietario
+@{
+    ViewData["Title"] = "Detalle de propietario";
+    /* var Inmuebles = ViewBag.Inmuebles as IEnumerable<net.Models.Inmueble>; */
+}
+
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Detalle del propietario</h2>
+</div>
+
+<div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-dark text-white">
+        <i class="fa-solid fa-user"></i> Información personal
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Nombre:</strong> @Model.Nombre</p>
+                <p><strong>Apellido:</strong> @Model.Apellido</p>
+                <p><strong>DNI:</strong> @Model.Dni</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Teléfono:</strong> @Model.Telefono</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Dirección:</strong> @Model.Direccion</p>
+                <p>
+                    <strong>Estado:</strong>
+                    @if (Model.Estado == 1)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactivo</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Falta implementar *@
+@*
+<div class="card shadow-lg border-0">
+    <div class="card-header bg-primary text-white">
+        <i class="fa-solid fa-building"></i> Inmuebles del propietario
+    </div>
+    <div class="card-body">
+        @if (Inmuebles != null && Inmuebles.Any())
+        {
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Estado</th>
+                        <th>Dirección</th>
+                        <th>Uso</th>
+                        <th>Tipo</th>
+                        <th>Ambientes</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Inmuebles)
+                    {
+                        <tr class="@(item.Estado == 0 ? "table-danger" : "")">
+                            <td>
+                                @(item.Estado == 1 
+                                    ? "<span class='badge bg-success'>Activo</span>" 
+                                    : "<span class='badge bg-danger'>Inactivo</span>")
+                                @Html.Raw("")
+                            </td>
+                            <td>@item.Direccion</td>
+                            <td>@item.UsoInmueble</td>
+                            <td>@item.TipoInmueble</td>
+                            <td>@item.Ambientes</td>
+                            <td>@item.Precio</td>
+                            <td>
+                                <a href="/Inmueble/Detalle/@item.InmuebleId" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fa-solid fa-eye"></i> Ver
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Este propietario no tiene inmuebles registrados.</p>
+        }
+    </div>
+</div>
+*@
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+    </a>
+</div>

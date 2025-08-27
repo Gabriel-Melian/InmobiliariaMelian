@@ -1,0 +1,93 @@
+@model net.Models.Propietario
+@{
+    ViewData["Title"] = "Edición de propietario";
+    int id = Model == null ? 0 : Model.PropietarioId;
+}
+
+<div class="text-center mb-4">
+    <h2 class="fw-bold">@((id == 0) ? "Crear nuevo propietario" : "Editar propietario")</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Propietario" asp-action="Guardar" method="post" id="guardarForm">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PropietarioId" value="@id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Apellido" class="form-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Dni" class="form-label"></label>
+                <input asp-for="Dni" class="form-control"/>
+                <span asp-validation-for="Dni" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Telefono" class="form-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Direccion" class="form-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Guardar" class="btn btn-primary" id="guardar"/>
+                <a asp-action="Index" class="btn btn-outline-secondary ms-2">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            const btnEnviar = document.getElementById("guardar");
+            btnEnviar.addEventListener("click", (event) => {
+                event.preventDefault();
+
+                // Evita Swal si hay errores de validación en cliente
+                if (!$("#guardarForm").valid()) {
+                    return;
+                }
+
+                Swal.fire({
+                    title: "¿Guardar cambios?",
+                    icon: "question",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Guardar",
+                    denyButtonText: "No guardar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const formCrea = document.getElementById("guardarForm");
+                        formCrea.submit(); // hace el POST real
+                    }
+                });
+            });
+        });
+    </script>
+}

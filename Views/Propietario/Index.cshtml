@@ -1,0 +1,69 @@
+@model IEnumerable<net.Models.Propietario>
+@{
+    ViewData["Title"] = "Propietarios";
+}
+
+<div class="text-center mb-4">
+    <h3 class="display-4">Propietarios registrados</h3>
+</div>
+
+<div class="mb-3 text-right">
+    <a asp-action="Edicion" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Nuevo propietario
+    </a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
+
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
+
+<table id="propietariosTable" class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Dirección</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.Estado == 0 ?  "bg-inactivos" : "")">
+                <td>@item.Dni</td>
+                <td>@item.Nombre</td>
+                <td>@item.Apellido</td>
+                <td>@item.Telefono</td>
+                <td>@item.Email</td>
+                <td>@item.Direccion</td>
+                <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="/Propietario/Detalle/@item.PropietarioId"><i class="fa-solid fa-eye"></i></a>
+                    @if(item.Estado == 1)/*&& User.IsInRole("Administrador")*/
+					{
+                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#" class="text-danger eliminar" data-url="/Propietario/Eliminar?id=@item.PropietarioId"><i class="fa-solid fa-trash"></i></a>
+					}else if(item.Estado == 0)/*&& User.IsInRole("Administrador")*/
+                    {
+                        <span> | </span><a href="#" data-url="/Propietario/Activar/@item.PropietarioId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+					}else if(item.Estado == 1)
+                    {
+                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    
+</table>
