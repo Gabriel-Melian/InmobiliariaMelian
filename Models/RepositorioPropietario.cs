@@ -154,7 +154,7 @@ public class RepositorioPropietario : RepositorioBase
                 command.Parameters.AddWithValue("@nombre", propietario.Nombre);
                 command.Parameters.AddWithValue("@apellido", propietario.Apellido);
                 command.Parameters.AddWithValue("@dni", propietario.Dni);
-                command.Parameters.AddWithValue("@email", propietario.Email);               
+                command.Parameters.AddWithValue("@email", propietario.Email);
                 command.Parameters.AddWithValue("@telefono", propietario.Telefono);
                 command.Parameters.AddWithValue("@direccion", propietario.Direccion);
                 connection.Open();
@@ -163,6 +163,122 @@ public class RepositorioPropietario : RepositorioBase
             }
         }
         return res;
+    }
+
+    public int Baja(int id)
+    {
+        int res = -1;
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"UPDATE propietario
+           SET estado = 0
+            WHERE  id = @id;";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+
+    public int Restore(int id)
+    {
+        int res = -1;
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"UPDATE propietario
+            SET estado = 1
+            WHERE id = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+
+    public List<Propietario> ObtenerActivos()
+    {
+        List<Propietario> propietarios = new List<Propietario>();
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"SELECT
+            id AS PropietarioId,
+            nombre AS Nombre,
+            apellido AS Apellido,
+            dni AS Dni,
+            email AS Email,
+            telefono AS Telefono,
+            direccion AS Direccion,
+            estado AS Estado
+           FROM propietario
+           WHERE estado = 1";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    propietarios.Add(new Propietario
+                    {
+                        PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                        Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                        Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                        Dni = reader.GetString(nameof(Propietario.Dni)),
+                        Email = reader.GetString(nameof(Propietario.Email)),
+                        Telefono = reader.GetString(nameof(Propietario.Telefono)),
+                        Direccion = reader.GetString(nameof(Propietario.Direccion)),
+                        Estado = reader.GetInt32(nameof(Propietario.Estado))
+                    });
+                }
+            }
+        }
+        return propietarios;
+    }
+    
+    public List<Propietario> ObtenerInactivos()
+    {
+        List<Propietario> propietarios = new List<Propietario>();
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"SELECT
+            id AS PropietarioId,
+            nombre AS Nombre,
+            apellido AS Apellido,
+            dni AS Dni,
+            email AS Email,
+            telefono AS Telefono,
+            direccion AS Direccion,
+            estado AS Estado
+           FROM propietario
+           WHERE estado = 0";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    propietarios.Add(new Propietario
+                    {
+                        PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                        Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                        Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                        Dni = reader.GetString(nameof(Propietario.Dni)),
+                        Email = reader.GetString(nameof(Propietario.Email)),
+                        Telefono = reader.GetString(nameof(Propietario.Telefono)),
+                        Direccion = reader.GetString(nameof(Propietario.Direccion)),
+                        Estado = reader.GetInt32(nameof(Propietario.Estado))
+                    });
+                }
+            }
+        }
+        return propietarios;
     }
 
 }

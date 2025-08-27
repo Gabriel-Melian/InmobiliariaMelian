@@ -69,7 +69,7 @@
             btnEnviar.addEventListener("click", (event) => {
                 event.preventDefault();
 
-                // Evita Swal si hay errores de validación en cliente
+                //Evita Swal si hay errores de validacion en cliente
                 if (!$("#guardarForm").valid()) {
                     return;
                 }
@@ -84,7 +84,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const formCrea = document.getElementById("guardarForm");
-                        formCrea.submit(); // hace el POST real
+                        formCrea.submit();
                     }
                 });
             });

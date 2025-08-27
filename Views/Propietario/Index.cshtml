@@ -67,3 +67,78 @@
     </tbody>
     
 </table>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function() {
+             function cargarPropietarios(estado) {
+				$.ajax({
+					url: '@Url.Action("Index", "Propietario")',
+					type: 'GET',
+					data: {
+						estado: estado
+					},
+					success: function (result) {
+						$('#propietariosTable tbody').html($(result).find('#propietariosTable tbody').html());
+                        cargarEventos();//PQ cuando vuelvo a cargar la tabla no carga los eventos
+					}
+				});
+			}
+            function cargarEventos() {
+                $('#todosBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarPropietarios(); 
+                });
+
+                $('#activoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarPropietarios(1); 
+                });
+
+                $('#desactivadoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarPropietarios(0); 
+                });
+                $('.eliminar').click(function(e) {
+                    e.preventDefault(); 
+                    var url = $(this).data('url'); 
+                    Swal.fire({
+                        title: "¿Eliminar Propietario?",
+                        text: "Quedará inactivo",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+                $('.activar').click(function(e) {
+                    e.preventDefault(); 
+                    var url = $(this).data('url'); 
+                    Swal.fire({
+                        title: "¿Activar propietario?",
+                        text: "Estara disponible para nuevos inmuebles",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            }
+            cargarEventos();
+        });
+        
+    </script>
+}

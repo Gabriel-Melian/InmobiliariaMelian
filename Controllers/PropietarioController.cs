@@ -15,10 +15,28 @@ public class PropietarioController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int? estado)
     {
         List<Propietario> lista;
-        lista = repo.ObtenerTodos();
+        if (estado != -1)
+        {
+            if (estado == 1)
+            {
+                lista = repo.ObtenerActivos();
+            }
+            else if (estado == 0)
+            {
+                lista = repo.ObtenerInactivos();
+            }
+            else
+            {
+                lista = repo.ObtenerTodos();
+            }
+        }
+        else
+        {
+            lista = repo.ObtenerTodos();
+        }
         return View(lista);
     }
 
@@ -69,6 +87,53 @@ public class PropietarioController : Controller
             var propietario = repo.ObtenerUno(id);
             return View(propietario);
         }
+    }
+
+    public IActionResult Eliminar(int id)
+    {
+        //if (!User.IsInRole("Administrador"))
+        //{
+        //TempData["Error"] = "Acceso denegado";
+        //return Redirect("/Home/Index");
+        //}
+
+
+        //List<Inmueble> inmuebles = repoInmueble.ObtenerPorPropietario(id);//Para que cuando de de baja un propietario sus inm queden inactivos
+        //foreach (var item in inmuebles)
+        //{
+        //repoInmueble.Baja(item.InmuebleId);
+        //}
+        int res = repo.Baja(id);
+        if (res == -1)
+            TempData["Error"] = "No se pudo eliminar el propietario";
+        else
+            //TempData["Mensaje"] = "El propietario se elimino y sus inmuebles también";
+            TempData["Mensaje"] = "El propietario se elimino.";
+        return RedirectToAction("Index");
+
+    }
+    
+    public IActionResult Activar(int id)
+    {
+        //if (!User.IsInRole("Administrador"))
+        //{
+            //TempData["Error"] = "Acceso denegado";
+            //return Redirect("/Home/Index");
+        //}
+        //primero me fijo que exista
+        if (repo.ObtenerUno(id) == null)
+        {
+            TempData["Error"] = "No se encontro el propietario";
+            return RedirectToAction("Index");
+        }
+        //y despues lo restaura
+        int res = repo.Restore(id);
+        if (res == -1)
+            TempData["Error"] = "No se pudo activar el propietario";
+        else
+            TempData["Mensaje"] = "El propietario se activo";
+        return RedirectToAction("Index");
+
     }
     
 }
