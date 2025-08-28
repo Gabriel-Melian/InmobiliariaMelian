@@ -25,4 +25,26 @@ $(document).ready(function () {
             }
         }
     });
+
+    $('#inquilinosTable').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": 6 },
+            { "width": "150px", "targets": 6 }
+        ],
+        "language": {
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Inquilinos",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Inquilinos",
+            "infoFiltered": "(Filtrado de _MAX_ total Inquilinos)",
+            "search": "Buscador:",
+            "zeroRecords": "Sin resultados encontrados",
+            "lengthMenu": "Mostrar _MENU_ Inquilinos",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
 });

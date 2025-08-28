@@ -1,0 +1,44 @@
+@model net.Models.Inquilino
+@{
+    ViewData["Title"] = "Detalle de inquilino";
+}
+
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Detalle del inquilino</h2>
+</div>
+
+<div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-dark text-white">
+        <i class="fa-solid fa-user"></i> Información personal
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Nombre:</strong> @Model.Nombre</p>
+                <p><strong>Apellido:</strong> @Model.Apellido</p>
+                <p><strong>DNI:</strong> @Model.Dni</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Teléfono:</strong> @Model.Telefono</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p>
+                    <strong>Estado:</strong>
+                    @if (Model.Estado == 1)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactivo</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+    </a>
+</div>

@@ -1,0 +1,144 @@
+@model IEnumerable<net.Models.Inquilino>
+@{
+    ViewData["Title"] = "Inquilinos";
+}
+
+<div class="text-center mb-4">
+    <h3 class="display-4">Inquilinos registrados</h3>
+</div>
+
+<div class="mb-3 text-right">
+    <a asp-action="Edicion" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Nuevo inquilino
+    </a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
+
+<table id="inquilinosTable" class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.Estado == 0 ? "bg-inactivos" : "")">
+                <td>@item.Dni</td>
+                <td>@item.Nombre</td>
+                <td>@item.Apellido</td>
+                <td>@item.Telefono</td>
+                <td>@item.Email</td>
+                <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>
+                    @if (item.Estado == 1) /* && User.IsInRole("Administrador") */
+                    {
+                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar?id=@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
+                    }
+                    else if (item.Estado == 0) /* && User.IsInRole("Administrador") */
+                    {
+                        <span> | </span><a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                    }
+                    else if (item.Estado == 1)
+                    {
+                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function cargarInquilinos(estado) {
+                $.ajax({
+                    url: '@Url.Action("Index", "Inquilino")',
+                    type: 'GET',
+                    data: {
+                        estado: estado
+                    },
+                    success: function (result) {
+                        $('#inquilinosTable tbody').html($(result).find('#inquilinosTable tbody').html());
+                        cargarEventos(); // Recargar eventos después de actualizar la tabla
+                    }
+                });
+            }
+
+            function cargarEventos() {
+                $('#todosBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos();
+                });
+
+                $('#activoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos(1);
+                });
+
+                $('#desactivadoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos(0);
+                });
+
+                $('.eliminar').click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Eliminar Inquilino?",
+                        text: "Quedará inactivo",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+
+                $('.activar').click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Activar Inquilino?",
+                        text: "Estará disponible para nuevos contratos",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            }
+
+            cargarEventos();
+        });
+    </script>
+}
