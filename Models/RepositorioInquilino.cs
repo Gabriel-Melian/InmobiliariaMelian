@@ -220,7 +220,9 @@ public class RepositorioInquilino : RepositorioBase
                 command.Parameters.AddWithValue("@email", inquilino.Email);
                 command.Parameters.AddWithValue("@telefono", inquilino.Telefono);
                 connection.Open();
+                //Esto devuelve null//Aca podria fallar.
                 res = Convert.ToInt32(command.ExecuteScalar());
+                //res = command.ExecuteNonQuery();//Devuelve cantidad de filas afectadas.
                 connection.Close();
             }
         }

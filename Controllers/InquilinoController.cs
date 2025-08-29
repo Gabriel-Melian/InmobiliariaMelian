@@ -65,7 +65,7 @@ public class InquilinoController : Controller
     [HttpPost]
     public IActionResult Guardar(int id, Inquilino inquilino)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid)//ModelState es para las verificaciones. IsValid devuelve true o false.
         {
             return View("Edicion", inquilino);
         }
@@ -78,6 +78,7 @@ public class InquilinoController : Controller
         if (id == 0)
         {
             repo.Alta(inquilino);
+            //TempData envia datos temporales.
             TempData["Mensaje"] = "Inquilino guardado";
         }
         else

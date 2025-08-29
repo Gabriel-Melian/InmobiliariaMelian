@@ -50,6 +50,32 @@
     <script src="https://kit.fontawesome.com/f2c4cc416a.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/2.1.5/js/dataTables.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let error = "@TempData["Error"]";
+            let mensaje = "@TempData["Mensaje"]";
+
+            if (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error
+                });
+            }
+
+            if (mensaje) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: mensaje,
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

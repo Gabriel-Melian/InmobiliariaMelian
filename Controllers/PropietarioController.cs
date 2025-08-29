@@ -47,6 +47,9 @@ public class PropietarioController : Controller
         else
         {
             var propietario = repo.ObtenerUno(id);
+            //ViewBag es "la bolsa de la vista" que me permite pasar informacion a la vista, son emcapsulamientos de una misma estructura
+            //ViewData es un String que me permite pasar informacion a la vista
+            
             //ViewBag.Inmuebles = repoInmueble.ObtenerPorPropietario(id);
             return View(propietario);
         }
