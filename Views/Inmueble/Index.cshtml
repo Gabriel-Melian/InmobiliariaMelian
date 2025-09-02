@@ -1,0 +1,154 @@
+@model IEnumerable<net.Models.Inmueble>
+@{
+    ViewData["Title"] = "Inmuebles";
+}
+
+<div class="text-center mb-4">
+    <h3 class="display-4">Inmuebles registrados</h3>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-4 d-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+    <div class="col-md-8 d-flex align-items-center">
+        <label class="me-2">Disponibles entre:</label>
+        <input type="date" id="inicio" class="form-control me-2" style="max-width:200px;" />
+        <input type="date" id="fin" class="form-control me-2" style="max-width:200px;" />
+        <button type="button" class="btn btn-outline-success me-2" id="fechasBtn">Buscar</button>
+        <button type="button" class="btn btn-outline-danger" id="sinFechasBtn">Limpiar</button>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped" id="inmueblesTable">
+    <thead class="table-dark">
+        <tr>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Propietario</th>
+            <th>Uso</th>
+            <th>Tipo</th>
+            <th>Ambientes</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.Estado == 0 ? "bg-inactivos" : "")">
+                <td>@item.Latitud</td>
+                <td>@item.Longitud</td>
+                <td>@($"{item.Propietario?.Nombre} {item.Propietario?.Apellido}")</td>
+                <td>@item.UsoInmueble?.UsoValor</td>
+                <td>@item.TipoInmueble?.Valor</td>
+                <td>@item.Ambientes</td>
+                <td>@item.Precio</td>
+                <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="/Inmueble/Detalle/@item.InmuebleId" title="Ver detalle">
+                        <i class="fa-solid fa-eye"></i>
+                    </a>
+                    @if (item.Estado == 1)
+                    {
+                        <span> | </span>
+                        <a href="/Inmueble/Edicion/@item.InmuebleId" title="Editar">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <span> | </span>
+                        <a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar" title="Desactivar">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <span> | </span>
+                        <a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar" title="Activar">
+                            <i class="fa-solid fa-trash-arrow-up"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="10" class="text-end">
+                <a href="/Inmueble/Edicion" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                </a>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            function cargarInmuebles(estado, desde, hasta) {
+                $.ajax({
+                    url: '@Url.Action("Index", "Inmueble")',
+                    type: 'GET',
+                    data: { estado: estado, desde: desde, hasta: hasta },
+                     success: function (result) {
+                        //Buscamos el nuevo tbody dentro de la vista devuelta
+                        var nuevoTbody = $(result).find('#inmueblesTable tbody').html();
+                        $('#inmueblesTable tbody').html(nuevoTbody);
+                        hookEventos();//reengancha los botones
+                    }
+                });
+            }
+
+            function hookEventos() {
+                $('#todosBtn').off().on('click', function () { cargarInmuebles(-1, null, null); });
+                $('#activoBtn').off().on('click', function () { cargarInmuebles(1, null, null); });
+                $('#desactivadoBtn').off().on('click', function () { cargarInmuebles(0, null, null); });
+
+                $('.desactivar').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Desactivar inmueble?",
+                        text: "No estará disponible para nuevos contratos",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Desactivar",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+
+                $('.activar').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Activar inmueble?",
+                        text: "Estará disponible para nuevos contratos",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+
+                $('#fechasBtn').off().on('click', function () {
+                    const inicio = $('#inicio').val();
+                    const fin = $('#fin').val();
+                    cargarInmuebles(-1, inicio, fin);
+                });
+
+                $('#sinFechasBtn').off().on('click', function () {
+                    $('#inicio').val(''); $('#fin').val('');
+                    cargarInmuebles(-1, null, null);
+                });
+            }
+
+            hookEventos();
+        });
+    </script>
+}

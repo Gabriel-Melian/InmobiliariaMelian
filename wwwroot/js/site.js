@@ -47,4 +47,28 @@ $(document).ready(function () {
             }
         }
     });
+
+    $('#inmueblesTable').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": 8 },
+            { "width": "150px", "targets": 8 }
+        ],
+        "language": {
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Inmuebles",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Inmuebles",
+            "infoFiltered": "(Filtrado de _MAX_ total Inmuebles)",
+            "search": "Buscador:",
+            "zeroRecords": "Sin resultados encontrados",
+            "lengthMenu": "Mostrar _MENU_ Inmuebles",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+
+    
 });
