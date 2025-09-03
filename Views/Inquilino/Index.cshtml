@@ -46,19 +46,16 @@
                 <td>@item.Email</td>
                 <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
                 <td>
-                    <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>
-                    @if (item.Estado == 1) /* && User.IsInRole("Administrador") */
+                    <a href="/Inquilino/Detalle/@item.InquilinoId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
+                    @if (item.Estado == 1 /* && User.IsInRole("Administrador") */)
                     {
-                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
-                        <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar?id=@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
+                        <a href="/Inquilino/Edicion/@item.InquilinoId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a href="#" class="text-danger eliminar me-2" data-url="/Inquilino/Eliminar?id=@item.InquilinoId" title="Eliminar"><i class="fa-solid fa-trash"></i></a>
                     }
-                    else if (item.Estado == 0) /* && User.IsInRole("Administrador") */
+                    else if (item.Estado == 0 /* && User.IsInRole("Administrador") */)
                     {
-                        <span> | </span><a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-                    }
-                    else if (item.Estado == 1)
-                    {
-                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar" title="Activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
                     }
                 </td>
             </tr>

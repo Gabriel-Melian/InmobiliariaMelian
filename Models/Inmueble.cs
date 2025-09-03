@@ -24,6 +24,7 @@ public class Inmueble
     public int? Ambientes { get; set; }
 
     [Required(ErrorMessage = "El precio es obligatorio.")]
+    [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
     public decimal? Precio { get; set; }
 
     public int? Estado { get; set; }

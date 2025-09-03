@@ -48,29 +48,19 @@
                 <td>@item.UsoInmueble?.UsoValor</td>
                 <td>@item.TipoInmueble?.Valor</td>
                 <td>@item.Ambientes</td>
-                <td>@item.Precio</td>
+                <td>@(item.Precio.HasValue ? item.Precio.Value.ToString("C0", new System.Globalization.CultureInfo("es-AR")) : "-")</td>
                 <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
                 <td>
-                    <a href="/Inmueble/Detalle/@item.InmuebleId" title="Ver detalle">
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
+                    <a href="/Inmueble/Detalle/@item.InmuebleId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
                     @if (item.Estado == 1)
                     {
-                        <span> | </span>
-                        <a href="/Inmueble/Edicion/@item.InmuebleId" title="Editar">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </a>
-                        <span> | </span>
-                        <a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar" title="Desactivar">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
+                        <a href="/Inmueble/Edicion/@item.InmuebleId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar me-2" title="Desactivar"><i class="fa-solid fa-trash"></i></a>
                     }
                     else
                     {
-                        <span> | </span>
-                        <a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar" title="Activar">
-                            <i class="fa-solid fa-trash-arrow-up"></i>
-                        </a>
+                        <a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar me-2" title="Activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
                     }
                 </td>
             </tr>

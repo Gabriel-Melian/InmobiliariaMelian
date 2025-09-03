@@ -49,17 +49,16 @@
                 <td>@item.Direccion</td>
                 <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
                 <td>
-                    <a href="/Propietario/Detalle/@item.PropietarioId"><i class="fa-solid fa-eye"></i></a>
-                    @if(item.Estado == 1)/*&& User.IsInRole("Administrador")*/
-					{
-                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
-                        <a href="#" class="text-danger eliminar" data-url="/Propietario/Eliminar?id=@item.PropietarioId"><i class="fa-solid fa-trash"></i></a>
-					}else if(item.Estado == 0)/*&& User.IsInRole("Administrador")*/
+                    <a href="/Propietario/Detalle/@item.PropietarioId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
+                    @if (item.Estado == 1 /*&& User.IsInRole("Administrador")*/)
                     {
-                        <span> | </span><a href="#" data-url="/Propietario/Activar/@item.PropietarioId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-					}else if(item.Estado == 1)
+                        <a href="/Propietario/Edicion/@item.PropietarioId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a href="#" class="text-danger eliminar me-2" data-url="/Propietario/Eliminar?id=@item.PropietarioId" title="Eliminar"><i class="fa-solid fa-trash"></i></a>
+                    }
+                    else if (item.Estado == 0 /*&& User.IsInRole("Administrador")*/)
                     {
-                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="#" data-url="/Propietario/Activar/@item.PropietarioId" class="text-success activar" title="Activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
                     }
                 </td>
             </tr>
