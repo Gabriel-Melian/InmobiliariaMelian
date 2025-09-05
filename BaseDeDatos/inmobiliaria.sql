@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 28-08-2025 a las 19:06:58
+-- Tiempo de generación: 05-09-2025 a las 19:11:01
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.1.10
 
@@ -58,6 +58,15 @@ CREATE TABLE `inmueble` (
   `estado` int NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `inmueble`
+--
+
+INSERT INTO `inmueble` (`id`, `latitud`, `longitud`, `idPropietario`, `idUsoInmueble`, `idTipoInmueble`, `ambientes`, `precio`, `estado`) VALUES
+(1, 'sfesfrs21', 'sfsdaawwr22', 2, 1, 1, 5, 100000, 1),
+(2, 'asdwa23', 'adsrrt44', 5, 2, 1, 3, 75000, 1),
+(3, 'ghfjry44', 'fjdliyu41', 4, 3, 4, 4, 66000, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -81,7 +90,8 @@ CREATE TABLE `inquilino` (
 INSERT INTO `inquilino` (`id`, `nombre`, `apellido`, `dni`, `email`, `telefono`, `estado`) VALUES
 (1, 'Santino', 'Rueda', '32758463', 'santinoR@gmail.com', '2664577867', 1),
 (2, 'Jorge', 'Guzman', '40278564', 'jguzman@gmail.com', '2664788690', 1),
-(3, 'Martin', 'Martinez', '42758847', 'mMartinez@gmail.com', '2664378576', 1);
+(3, 'Martin', 'Martinez', '42758847', 'mMartinez@gmail.com', '2664378576', 1),
+(4, 'Milena', 'Gonzalez', '42865578', 'mileeG@gmail.com', '2664667589', 1);
 
 -- --------------------------------------------------------
 
@@ -110,7 +120,7 @@ CREATE TABLE `pago` (
   `importe` decimal(10,0) NOT NULL,
   `fecha` date NOT NULL,
   `detalles` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `estado` int NOT NULL DEFAULT '1'
+  `estado` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -152,6 +162,17 @@ CREATE TABLE `tipoinmueble` (
   `valor` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `tipoinmueble`
+--
+
+INSERT INTO `tipoinmueble` (`id`, `valor`) VALUES
+(1, 'Residencial'),
+(2, 'Comercial'),
+(3, 'Industrial'),
+(4, 'Terreno'),
+(5, 'Otro');
+
 -- --------------------------------------------------------
 
 --
@@ -163,6 +184,16 @@ CREATE TABLE `usoinmueble` (
   `valor` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `usoinmueble`
+--
+
+INSERT INTO `usoinmueble` (`id`, `valor`) VALUES
+(1, 'Alquiler'),
+(2, 'Venta'),
+(3, 'Arriendo'),
+(4, 'Otro');
+
 -- --------------------------------------------------------
 
 --
@@ -173,12 +204,20 @@ CREATE TABLE `usuario` (
   `id` int NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
-  `email` int NOT NULL,
+  `email` varchar(100) NOT NULL,
   `password` varchar(200) NOT NULL,
   `rol` int NOT NULL,
-  `dni` int NOT NULL,
+  `dni` varchar(20) NOT NULL,
   `avatar` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `nombre`, `apellido`, `email`, `password`, `rol`, `dni`, `avatar`) VALUES
+(1, 'Gabriel', 'Melian', 'Gabriell86@gmail.com', 'misipi', 1, '43487566', 'qsyonoseperoeslargo'),
+(2, 'Pedro', 'Gonzalez', 'Drope@gmail.com', 'judi', 2, '44657388', 'qsyonoseperoeslargox2');
 
 --
 -- Índices para tablas volcadas
@@ -188,13 +227,19 @@ CREATE TABLE `usuario` (
 -- Indices de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idInmueble_inmuebleId` (`idInmueble`),
+  ADD KEY `idInquilino_inquilinoId` (`idInquilino`),
+  ADD KEY `idUsuario_usuarioId` (`idUsuario`);
 
 --
 -- Indices de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idPropietario_propietarioId` (`idPropietario`),
+  ADD KEY `idTipo_tipoinmuebleId` (`idTipoInmueble`),
+  ADD KEY `idUso_usoinmuebleId` (`idUsoInmueble`);
 
 --
 -- Indices de la tabla `inquilino`
@@ -255,13 +300,13 @@ ALTER TABLE `contrato`
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
 --
 ALTER TABLE `inquilino`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `multa`
@@ -285,19 +330,39 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `tipoinmueble`
 --
 ALTER TABLE `tipoinmueble`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usoinmueble`
 --
 ALTER TABLE `usoinmueble`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `contrato`
+--
+ALTER TABLE `contrato`
+  ADD CONSTRAINT `idInmueble_inmuebleId` FOREIGN KEY (`idInmueble`) REFERENCES `inmueble` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `idInquilino_inquilinoId` FOREIGN KEY (`idInquilino`) REFERENCES `inquilino` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `idUsuario_usuarioId` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `inmueble`
+--
+ALTER TABLE `inmueble`
+  ADD CONSTRAINT `idPropietario_propietarioId` FOREIGN KEY (`idPropietario`) REFERENCES `propietario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `idTipo_tipoinmuebleId` FOREIGN KEY (`idTipoInmueble`) REFERENCES `tipoinmueble` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `idUso_usoinmuebleId` FOREIGN KEY (`idUsoInmueble`) REFERENCES `usoinmueble` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

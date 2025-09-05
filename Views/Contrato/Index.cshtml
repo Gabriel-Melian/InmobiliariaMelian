@@ -1,0 +1,118 @@
+@model IEnumerable<net.Models.Contrato>
+@{
+    ViewData["Title"] = "Contratos";
+}
+
+<div class="text-center mb-4">
+    <h3 class="display-4">Contratos registrados</h3>
+</div>
+
+<div class="mb-3 text-right">
+    <a asp-action="Edicion" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Nuevo contrato
+    </a>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="inactivoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
+
+<table id="contratosTable" class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Inquilino</th>
+            <th>Inmueble</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.Estado == 0 ? "bg-inactivos" : "")">
+                <td>@($"{item.Inquilino?.Nombre} {item.Inquilino?.Apellido}")</td>
+                <td>@($"{item.Inmueble?.Propietario?.Apellido} - {item.Inmueble?.TipoInmueble?.Valor}")</td>
+                <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+                <td>@item.FechaFin.ToString("dd/MM/yyyy")</td>
+                <td>@item.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
+                <td>@(item.Estado == 1 ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="/Contrato/Detalle/@item.ContratoId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
+                    @if (item.Estado == 1)
+                    {
+                        <a href="/Contrato/Edicion/@item.ContratoId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+                        
+                        <a href="#" data-url="/Contrato/Anular/@item.ContratoId" class="text-danger anular me-2" title="Anular contrato"><i class="fa-solid fa-ban"></i></a>
+                    }
+                    else
+                    {
+                        <a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar me-2" title="Reactivar contrato"><i class="fa-solid fa-rotate-left"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            function cargarContratos(estado) {
+                $.ajax({
+                    url: '@Url.Action("Index", "Contrato")',
+                    type: 'GET',
+                    data: { estado: estado },
+                    success: function (result) {
+                        var nuevoTbody = $(result).find('#contratosTable tbody').html();
+                        $('#contratosTable tbody').html(nuevoTbody);
+                        hookEventos();
+                    }
+                });
+            }
+
+            function hookEventos() {
+                $('#todosBtn').off().on('click', function () { cargarContratos(-1); });
+                $('#activoBtn').off().on('click', function () { cargarContratos(1); });
+                $('#inactivoBtn').off().on('click', function () { cargarContratos(0); });
+
+                $('.anular').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Anular contrato?",
+                        text: "El contrato quedará inactivo",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Anular",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+
+                $('.activar').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Reactivar contrato?",
+                        text: "El contrato volverá a estar vigente",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Reactivar",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+            }
+
+            hookEventos();
+        });
+    </script>
+}

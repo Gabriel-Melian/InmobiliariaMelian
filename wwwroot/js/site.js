@@ -70,5 +70,27 @@ $(document).ready(function () {
         }
     });
 
+    $('#contratosTable').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": 7 },
+            { "width": "150px", "targets": 7 }
+        ],
+        "language": {
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Contratos",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Contratos",
+            "infoFiltered": "(Filtrado de _MAX_ total Contratos)",
+            "search": "Buscador:",
+            "zeroRecords": "Sin resultados encontrados",
+            "lengthMenu": "Mostrar _MENU_ Contratos",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+
     
 });

@@ -1,7 +1,23 @@
+
+using Microsoft.AspNetCore.Authentication.Cookies;//Para autenticacion
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Autenticación con cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Usuario/Login";//Si no esta logueado va a esta ruta
+        options.LogoutPath = "/Usuario/Logout";
+        options.AccessDeniedPath = "/Home/AccesoDenegado";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();//Tambien necesario
 
 var app = builder.Build();
 
@@ -18,10 +34,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();//Tambien para autenticacion, antes del UseAuthorization
+app.UseAuthorization();//Tambien necesario
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Usuario}/{action=Login}/{id?}");
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

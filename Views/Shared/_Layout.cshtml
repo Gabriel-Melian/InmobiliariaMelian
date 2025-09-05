@@ -22,15 +22,59 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"></li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="Index">Propietarios</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="Index">Inquilinos</a>
-                        </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="Index">Inmuebles</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Propietario" asp-action="Index">Propietarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Inquilino" asp-action="Index">Inquilinos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Inmueble" asp-action="Index">Inmuebles</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Contrato" asp-action="Index">Contratos</a>
+                            </li>
+                        }
+
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item ms-auto">
+                                <a class="nav-link text-dark" asp-controller="Usuario" asp-action="Login">
+                                    <i class="fa-solid fa-right-to-bracket"></i> Acceder
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown ms-auto">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @{
+                                        var avatar = User.FindFirst("Avatar")?.Value;
+                                        var avatarUrl = string.IsNullOrEmpty(avatar) || !avatar.Contains("/")
+                                            ? "/img/default-avatar.png"
+                                            : avatar;
+                                    }
+                                    <img src="@avatarUrl" class="rounded-circle me-2"
+                                        style="width:30px;height:30px;object-fit:cover;" />
+                                    @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Usuario" asp-action="Perfil">
+                                            <i class="fa-solid fa-user"></i> Perfil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Usuario" asp-action="Logout">
+                                            <i class="fa-solid fa-right-from-bracket"></i> Salir
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
