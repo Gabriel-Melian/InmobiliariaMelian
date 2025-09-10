@@ -33,7 +33,7 @@ public class UsuarioController : Controller
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),//aparece en el layout
-                new Claim(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),//para obtener el Id luego
+                new Claim(ClaimTypes.NameIdentifier, usuario.UsuarioId.ToString()),//para obtener el Id despues
                 new Claim(ClaimTypes.Email, usuario.Email),
                 new Claim(ClaimTypes.Role, usuario.RolEnum.ToString()),//"Administrador" / "Empleado"
                 new Claim("Avatar", usuario.Avatar ?? string.Empty)
@@ -66,7 +66,7 @@ public class UsuarioController : Controller
     [Authorize]
     public IActionResult Perfil()
     {
-        //Aca quiero cargar los datos del usuario logueado y mostrarlos en una vista por ejemplo
+        //Aca quiero cargar los datos del usuario logueado y mostrarlos en la vista Perfil
         return View();
     }
 }

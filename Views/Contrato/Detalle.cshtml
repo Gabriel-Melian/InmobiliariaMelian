@@ -1,0 +1,48 @@
+@model net.Models.Contrato
+@{
+    ViewData["Title"] = "Detalle de contrato";
+}
+
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Detalle del contrato</h2>
+</div>
+
+<div class="card shadow-lg border-0 mb-4">
+    <div class="card-header bg-dark text-white">
+        <i class="fa-solid fa-file-contract"></i> Información del contrato
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Inquilino:</strong> @($"{Model.Inquilino?.Nombre} {Model.Inquilino?.Apellido}")</p>
+                <p><strong>Inmueble:</strong> @Model.Inmueble?.ToString()</p>
+                <p><strong>Precio:</strong> @Model.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Fecha inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy")</p>
+                <p><strong>Fecha fin:</strong> @Model.FechaFin.ToString("dd/MM/yyyy")</p>
+                <p>
+                    <strong>Estado:</strong>
+                    @if (Model.Estado == (int)net.Models.Contrato.EstadoContrato.Vigente)
+                    {
+                        <span class="badge bg-success">Vigente</span>
+                    }
+                    else if (Model.Estado == (int)net.Models.Contrato.EstadoContrato.Anulado)
+                    {
+                        <span class="badge bg-danger">Anulado</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+    </a>
+</div>

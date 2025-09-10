@@ -13,7 +13,8 @@ public class Contrato
 
     public int InquilinoId { get; set; }
     public int InmuebleId { get; set; }
-    public int UsuarioId { get; set; }
+    public int UsuarioCreadorId { get; set; }
+    public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
@@ -24,21 +25,23 @@ public class Contrato
     public EstadoContrato Tipo => (EstadoContrato)Estado;
 
     //Trazabilidad
-    public int? AnuladorId { get; set; }
+    public int? UsuarioAnuladorId { get; set; }
     public DateTime? FechaAnulacion { get; set; }
 
     //Relaciones
     public Inquilino? Inquilino { get; set; }
     public Inmueble? Inmueble { get; set; }
-    //public Usuario? Creador { get; set; }
-    //public Usuario? Anulador { get; set; }
+    public Usuario? Creador { get; set; }
+    public Usuario? Anulador { get; set; }
 
     //Relacion con clase Pago -> 1:N
-    //public List<Pago> Pagos { get; set; }
+    public List<Pago>? Pagos { get; set; }
 
     public override string ToString()
     {
         return $"ContratoId: {ContratoId}, InquilinoId: {InquilinoId}, InmuebleId: {InmuebleId}, " +
-            $"UsuarioId: {UsuarioId}, FechaInicio: {FechaInicio}, FechaFin: {FechaFin}, Precio: {Precio}, Estado: {Estado}";
+               $"UsuarioCreadorId: {UsuarioCreadorId}, FechaInicio: {FechaInicio}, FechaFin: {FechaFin}, " +
+               $"Precio: {Precio}, Estado: {Estado}, FechaCreacion: {FechaCreacion}, " +
+               $"UsuarioAnuladorId: {UsuarioAnuladorId}, FechaAnulacion: {FechaAnulacion}";
     }
 }

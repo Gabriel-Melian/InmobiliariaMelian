@@ -72,8 +72,8 @@ $(document).ready(function () {
 
     $('#contratosTable').DataTable({
         "columnDefs": [
-            { "orderable": false, "targets": 7 },
-            { "width": "150px", "targets": 7 }
+            { "orderable": false, "targets": -1 },
+            { "width": "150px", "targets": -1 }
         ],
         "language": {
             "emptyTable": "No hay datos",
