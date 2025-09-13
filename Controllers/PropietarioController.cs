@@ -10,6 +10,8 @@ public class PropietarioController : Controller
     private readonly ILogger<PropietarioController> _logger;
     private RepositorioPropietario repo = new RepositorioPropietario();
 
+    private RepositorioInmueble repoInmueble = new RepositorioInmueble();
+
     public PropietarioController(ILogger<PropietarioController> logger)
     {
         _logger = logger;
@@ -47,8 +49,12 @@ public class PropietarioController : Controller
         else
         {
             var propietario = repo.ObtenerUno(id);
-            //ViewBag es "la bolsa de la vista" que me permite pasar informacion a la vista, son emcapsulamientos de una misma estructura
+            //ViewBag es "la bolsa de la vista" que me permite pasar informacion a la vista,
+            //son emcapsulamientos de una misma estructura
             //ViewData es un String que me permite pasar informacion a la vista
+
+            var inmuebles = repoInmueble.ObtenerPorPropietario(id);
+            propietario.Inmuebles = inmuebles;
             
             //ViewBag.Inmuebles = repoInmueble.ObtenerPorPropietario(id);
             return View(propietario);

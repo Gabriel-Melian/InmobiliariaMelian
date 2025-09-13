@@ -47,6 +47,12 @@ public class InquilinoController : Controller
         else
         {
             var inquilino = repo.ObtenerUno(id);
+
+            var repoContrato = new RepositorioContrato();
+            var contratos = repoContrato.ObtenerPorInquilino(id);
+
+            ViewBag.Contratos = contratos;
+            
             return View(inquilino);
         }
     }

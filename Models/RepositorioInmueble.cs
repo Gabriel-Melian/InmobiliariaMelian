@@ -309,7 +309,7 @@ public class RepositorioInmueble : RepositorioBase
         return inmueble;
     }
 
-    public List<Inmueble> ObtenerPorPropietario(int id)
+    public List<Inmueble>? ObtenerPorPropietario(int id)
     {
         List<Inmueble> inmuebles = new List<Inmueble>();
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
@@ -330,6 +330,7 @@ public class RepositorioInmueble : RepositorioBase
                     p.nombre        AS Nombre,
                     p.apellido      AS Apellido,
                     p.dni           AS Dni,
+                    p.estado        AS PropietarioEstado,
 
                     t.id            AS TipoId,
                     t.valor         AS Valor,

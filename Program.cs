@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Autenticación con cookies
+//Autenticacion con cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -34,7 +34,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//Puede estar autenticado pero NO Autorizado
 app.UseAuthentication();//Tambien para autenticacion, antes del UseAuthorization
+//Aca se autoriza el usuario (Tema de seguridad y permisos)
 app.UseAuthorization();//Tambien necesario
 
 app.MapControllerRoute(

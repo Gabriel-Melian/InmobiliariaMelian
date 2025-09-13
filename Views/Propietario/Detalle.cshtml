@@ -39,60 +39,48 @@
     </div>
 </div>
 
-@* Falta implementar *@
-@*
-<div class="card shadow-lg border-0">
-    <div class="card-header bg-primary text-white">
-        <i class="fa-solid fa-building"></i> Inmuebles del propietario
-    </div>
-    <div class="card-body">
-        @if (Inmuebles != null && Inmuebles.Any())
+@*<h4>Inmuebles</h4>
+@if (Model.Inmuebles != null && Model.Inmuebles.Any())
+{
+    <ul>
+        @foreach (var inmueble in Model.Inmuebles)
         {
-            <table class="table table-hover table-striped align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Estado</th>
-                        <th>Dirección</th>
-                        <th>Uso</th>
-                        <th>Tipo</th>
-                        <th>Ambientes</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Inmuebles)
-                    {
-                        <tr class="@(item.Estado == 0 ? "table-danger" : "")">
-                            <td>
-                                @(item.Estado == 1 
-                                    ? "<span class='badge bg-success'>Activo</span>" 
-                                    : "<span class='badge bg-danger'>Inactivo</span>")
-                                @Html.Raw("")
-                            </td>
-                            <td>@item.Direccion</td>
-                            <td>@item.UsoInmueble</td>
-                            <td>@item.TipoInmueble</td>
-                            <td>@item.Ambientes</td>
-                            <td>@item.Precio</td>
-                            <td>
-                                <a href="/Inmueble/Detalle/@item.InmuebleId" 
-                                   class="btn btn-sm btn-outline-primary">
-                                    <i class="fa-solid fa-eye"></i> Ver
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <li>@($"{inmueble.Latitud}, {inmueble.Longitud} - {inmueble.Precio:C0}")</li>
         }
-        else
+    </ul>
+}
+else
+{
+    <p>No tiene inmuebles registrados.</p>
+}*@
+
+<h4>Inmuebles asociados</h4>
+@if (Model.Inmuebles != null && Model.Inmuebles.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var inmueble in Model.Inmuebles)
         {
-            <p class="text-muted">Este propietario no tiene inmuebles registrados.</p>
+            <tr>
+                <td>@inmueble.Latitud</td>
+                <td>@inmueble.Longitud</td>
+                <td>@inmueble.Precio</td>
+            </tr>
         }
-    </div>
-</div>
-*@
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay inmuebles registrados para este propietario.</p>
+}
 
 <div class="mt-4">
     <a asp-action="Index" class="btn btn-outline-secondary">

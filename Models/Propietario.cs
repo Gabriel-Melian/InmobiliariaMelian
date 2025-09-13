@@ -32,10 +32,13 @@ public class Propietario
     public string? Direccion { get; set; }
 
     public int Estado { get; set; }
+    
+    //Relacin con Inmuebles para mostrar en el Detalle.cshtml los asoaciados
+    public List<Inmueble>? Inmuebles { get; set; }
     public override string ToString()
-		{
-			var res = $"{Dni} {Nombre} {Apellido}";
-			return res;
-		}
+  {
+    var res = $"{Dni} {Nombre} {Apellido}";
+    return res;
+  }
 
 }

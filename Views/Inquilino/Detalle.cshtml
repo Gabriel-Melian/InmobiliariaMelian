@@ -37,6 +37,40 @@
     </div>
 </div>
 
+<hr />
+
+<h4>Contratos asociados</h4>
+@if (ViewBag.Contratos != null && ((List<net.Models.Contrato>)ViewBag.Contratos).Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Inmueble</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Precio</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var contrato in (List<net.Models.Contrato>)ViewBag.Contratos)
+        {
+            <tr>
+                <td>@($"{contrato.Inmueble.Latitud}, {contrato.Inmueble.Longitud}")</td>
+                <td>@contrato.FechaInicio.ToString("dd/MM/yyyy")</td>
+                <td>@contrato.FechaFin.ToString("dd/MM/yyyy")</td>
+                <td>@contrato.Precio.ToString("C0")</td>
+                <td>@(contrato.Estado == 1 ? "Activo" : "Inactivo")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay contratos asociados a este inquilino.</p>
+}
+
 <div class="mt-4">
     <a asp-action="Index" class="btn btn-outline-secondary">
         <i class="fa-solid fa-arrow-left"></i> Volver al listado

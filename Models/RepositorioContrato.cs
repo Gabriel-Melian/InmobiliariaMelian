@@ -559,6 +559,61 @@ public class RepositorioContrato : RepositorioBase
         return contratos;
     }
 
+    public List<Contrato> ObtenerPorInquilino(int id)
+    {
+        var contratos = new List<Contrato>();
+        using (var connection = new MySqlConnection(ConnectionString))
+        {
+            var query = @"
+                SELECT 
+                    c.id AS ContratoId, 
+                    c.idInquilino AS InquilinoId, 
+                    c.idInmueble AS InmuebleId,
+                    c.idUsuarioCreador AS UsuarioCreadorId,
+                    c.fechaCreacion AS FechaCreacion,
+                    c.desde AS FechaInicio, 
+                    c.hasta AS FechaFin, 
+                    c.precio AS Precio,
+                    c.estado AS Estado,
+                    c.idUsuarioAnulador AS UsuarioAnuladorId,
+                    c.fechaAnulacion AS FechaAnulacion,
+
+                    i.id AS InquilinoId,
+                    i.nombre AS NombreInquilino,
+                    i.apellido AS ApellidoInquilino,
+                    i.dni AS DniInquilino,
+
+                    inm.id AS InmuebleId,
+                    inm.latitud AS Latitud,
+                    inm.longitud AS Longitud,
+                    inm.idPropietario AS PropietarioId,
+                    inm.precio AS PrecioInmueble,
+
+                    p.id AS PropietarioId,
+                    p.nombre AS NombreP,
+                    p.apellido AS ApellidoP,
+                    p.dni AS DniP
+                FROM contrato c
+                INNER JOIN inquilino i ON i.id = c.idInquilino
+                INNER JOIN inmueble inm ON inm.id = c.idInmueble
+                INNER JOIN propietario p ON p.id = inm.idPropietario
+                WHERE c.idInquilino = @id";
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    contratos.Add(MapearContrato(reader));
+                }
+            }
+        }
+        return contratos;
+    }
+
     public int Alta(Contrato contrato)
     {
         int res = -1;
