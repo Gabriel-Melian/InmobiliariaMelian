@@ -60,18 +60,32 @@ else
     <table class="table table-bordered">
         <thead class="table-dark">
             <tr>
-                <th>Latitud</th>
-                <th>Longitud</th>
+                <th>Descripción</th>
                 <th>Precio</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach (var inmueble in Model.Inmuebles)
         {
             <tr>
-                <td>@inmueble.Latitud</td>
-                <td>@inmueble.Longitud</td>
-                <td>@inmueble.Precio</td>
+                <td>
+                    @($"{inmueble.TipoInmueble?.Valor} {inmueble.UsoInmueble?.UsoValor} - Latitud: {inmueble.Latitud}, Longitud: {inmueble.Longitud}")
+                </td>
+                <td>@inmueble.Precio?.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
+                <td>
+                    <a href="/Inmueble/Detalle/@inmueble.InmuebleId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
+                    @if (inmueble.Estado == 1 /*&& User.IsInRole("Administrador")*/)
+                    {
+                        <a href="/Inmueble/Edicion/@inmueble.InmuebleId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <a href="#" data-url="/Inmueble/Eliminar/@inmueble.InmuebleId" class="text-danger desactivar me-2" title="Desactivar"><i class="fa-solid fa-trash"></i></a>
+                    }
+                    else if (inmueble.Estado == 0 /*&& User.IsInRole("Administrador")*/)
+                    {
+                        <a href="#" data-url="/Inmueble/Activar/@inmueble.InmuebleId" class="text-success activar me-2" title="Activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                    }
+                </td>
             </tr>
         }
         </tbody>
@@ -87,3 +101,36 @@ else
         <i class="fa-solid fa-arrow-left"></i> Volver al listado
     </a>
 </div>
+
+@section Scripts {
+    <script>
+        $(function () {
+                $('.desactivar').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Desactivar inmueble?",
+                        text: "No estará disponible para nuevos contratos",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Desactivar",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+
+                $('.activar').off().on('click', function (e) {
+                    e.preventDefault();
+                    const url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Activar inmueble?",
+                        text: "Estará disponible para nuevos contratos",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+                });
+
+        });
+    </script>
+}

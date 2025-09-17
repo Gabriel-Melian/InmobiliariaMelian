@@ -39,6 +39,38 @@
     </div>
 </div>
 
+<h4>Contratos asociados</h4>
+@if (Model.Contratos != null && Model.Contratos.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Inquilino</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Precio</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var contrato in Model.Contratos)
+        {
+            <tr>
+                <td>@($"{contrato.Inquilino?.Nombre} {contrato.Inquilino?.Apellido}")</td>
+                <td>@contrato.FechaInicio.ToString("dd/MM/yyyy")</td>
+                <td>@contrato.FechaFin.ToString("dd/MM/yyyy")</td>
+                <td>@contrato.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
+                <td>@(contrato.Estado == 1 ? "Activo" : "Inactivo")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay contratos registrados para este inmueble.</p>
+}
+
 <div class="mt-4">
     <a asp-action="Index" class="btn btn-outline-secondary">
         <i class="fa-solid fa-arrow-left"></i> Volver al listado

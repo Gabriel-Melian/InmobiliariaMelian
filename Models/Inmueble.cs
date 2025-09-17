@@ -35,9 +35,12 @@ public class Inmueble
 
     public UsoInmueble? UsoInmueble { get; set; }
 
+    public List<Contrato>? Contratos { get; set; }
+
     public override string ToString()
     {
-        var res = $"{Latitud} {Longitud} {IdPropietario} {IdUso} {IdTipo} {Ambientes} {Precio} {Estado}";
-        return res;
+        return $"{TipoInmueble?.Valor} {UsoInmueble?.UsoValor} - {Propietario?.Apellido}, {Propietario?.Nombre} ({Latitud}, {Longitud})";
+        /*var res = $"{Latitud} {Longitud} {IdPropietario} {IdUso} {IdTipo} {Ambientes} {Precio} {Estado}";
+        return res;*/
     }
 }

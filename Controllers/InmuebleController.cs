@@ -13,7 +13,7 @@ public class InmuebleController : Controller
     private RepositorioPropietario repoPropietario = new RepositorioPropietario();
     private RepositorioTipo repoTipo = new RepositorioTipo();
     private RepositorioUso repoUso = new RepositorioUso();
-    //private RepositorioContrato repoContrato = new RepositorioContrato();
+    private RepositorioContrato repoContrato = new RepositorioContrato();
 
     public InmuebleController(ILogger<InmuebleController> logger)
     {
@@ -25,9 +25,9 @@ public class InmuebleController : Controller
         List<Inmueble> lista;
         if (desde.HasValue && hasta.HasValue)
         {
-            lista = repo.ObtenerTodos();
+            //lista = repo.ObtenerTodos();
             //Los disponibles se obtienen una vez tenga las fechas de inicio y fin, de momento muestro todos.
-            //lista = repo.ObtenerDisponibles(desde.Value.ToString("yyyy-MM-dd"), hasta.Value.ToString("yyyy-MM-dd"));
+            lista = repo.ObtenerDisponibles(desde.Value.ToString("yyyy-MM-dd"), hasta.Value.ToString("yyyy-MM-dd"));
         }
         else
         {
@@ -54,13 +54,16 @@ public class InmuebleController : Controller
         else
         {
             var inmueble = repo.ObtenerUno(id);
-            //var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
-            //var uso = repoUso.ObtenerUno(inmueble.IdUso);
-            //var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
-            //ViewBag.Contratos = repoContrato.ObtenerPorInmueble(id);
-            //inmueble.Propietario = propietario;
-            //inmueble.UsoInmueble = uso;
-            //inmueble.TipoInmueble = tipo;
+            
+            var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
+            var uso = repoUso.ObtenerUno(inmueble.IdUso);
+            var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
+            var contratos = repoContrato.ObtenerPorInmueble(id);
+
+            inmueble.Contratos = contratos;
+            inmueble.Propietario = propietario;
+            inmueble.UsoInmueble = uso;
+            inmueble.TipoInmueble = tipo;
             return View(inmueble);
         }
     }

@@ -523,18 +523,18 @@ public class RepositorioContrato : RepositorioBase
                     c.idUsuarioAnulador AS UsuarioAnuladorId,
                     c.fechaAnulacion AS FechaAnulacion,
 
-                    i.id AS InquilinoId,
+                    i.id AS Inquilino_Id,
                     i.nombre AS NombreInquilino,
                     i.apellido AS ApellidoInquilino,
                     i.dni AS DniInquilino,
 
-                    inm.id AS InmuebleId,
+                    inm.id AS Inmueble_Id,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
-                    inm.idPropietario AS PropietarioId,
+                    inm.idPropietario AS Propietario_Id,
                     inm.precio AS PrecioInmueble,
 
-                    p.id AS PropietarioId,
+                    p.id AS Propietario_Id,
                     p.nombre AS NombreP,
                     p.apellido AS ApellidoP,
                     p.dni AS DniP
@@ -552,7 +552,7 @@ public class RepositorioContrato : RepositorioBase
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    contratos.Add(MapearContrato(reader));
+                    contratos.Add(MapearContrato2(reader));//Aca hice cambios
                 }
             }
         }
@@ -719,7 +719,7 @@ public class RepositorioContrato : RepositorioBase
         }
         return res;
     }
-    
+
     //Este metodo contruye el objeto Contrato, asi reutilizo el codigo
     private Contrato MapearContrato(MySqlDataReader reader)
     {
@@ -764,5 +764,47 @@ public class RepositorioContrato : RepositorioBase
         };
     }
 
+    private Contrato MapearContrato2(MySqlDataReader reader)
+    {
+        return new Contrato
+        {
+            ContratoId = reader.GetInt32("ContratoId"),
+            InquilinoId = reader.GetInt32("InquilinoId"),
+            InmuebleId = reader.GetInt32("InmuebleId"),
+            UsuarioCreadorId = reader.GetInt32("UsuarioCreadorId"),
+            FechaCreacion = reader.GetDateTime("FechaCreacion"),
+            FechaInicio = reader.GetDateTime("FechaInicio"),
+            FechaFin = reader.GetDateTime("FechaFin"),
+            Precio = reader.GetDecimal("Precio"),
+            Estado = reader.GetInt32("Estado"),
+            UsuarioAnuladorId = reader.IsDBNull(reader.GetOrdinal("UsuarioAnuladorId"))
+                ? (int?)null : reader.GetInt32("UsuarioAnuladorId"),
+            FechaAnulacion = reader.IsDBNull(reader.GetOrdinal("FechaAnulacion"))
+                ? (DateTime?)null : reader.GetDateTime("FechaAnulacion"),
 
+            Inquilino = new Inquilino
+            {
+                InquilinoId = reader.GetInt32("Inquilino_Id"),//Agregue _
+                Nombre = reader.GetString("NombreInquilino"),
+                Apellido = reader.GetString("ApellidoInquilino"),
+                Dni = reader.GetString("DniInquilino")
+            },
+            Inmueble = new Inmueble
+            {
+                InmuebleId = reader.GetInt32("Inmueble_Id"),//Agregue _
+                Latitud = reader.GetString("Latitud"),
+                Longitud = reader.GetString("Longitud"),
+                Precio = reader.GetDecimal("PrecioInmueble"),
+                IdPropietario = reader.GetInt32("Propietario_Id"),//Agregue _
+                Propietario = new Propietario
+                {
+                    PropietarioId = reader.GetInt32("Propietario_Id"),//Agregue _
+                    Nombre = reader.GetString("NombreP"),
+                    Apellido = reader.GetString("ApellidoP"),
+                    Dni = reader.GetString("DniP")
+                }
+            }
+        };
+    }
+    
 }
