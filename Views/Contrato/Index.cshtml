@@ -39,8 +39,8 @@
         @foreach (var item in Model)
         {
             <tr class="@(item.Estado == 0 ? "bg-inactivos" : "")">
-                <td>@($"{item.Inquilino?.Nombre} {item.Inquilino?.Apellido}")</td>
-                <td>@($"{item.Inmueble?.Propietario?.Apellido} - {item.Inmueble?.TipoInmueble?.Valor}")</td>
+                <td>@($"{item.Inquilino?.Nombre} {item.Inquilino?.Apellido} DNI {item.Inquilino?.Dni}")</td>
+                <td>@($"{item.Inmueble?.Direccion} - {item.Inmueble?.TipoInmueble?.Valor} {item.Inmueble?.UsoInmueble?.UsoValor}")</td>
                 <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
                 <td>@item.FechaFin.ToString("dd/MM/yyyy")</td>
                 <td>@item.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>

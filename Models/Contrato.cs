@@ -1,4 +1,5 @@
 namespace net.Models;
+using System.ComponentModel.DataAnnotations;
 
 public class Contrato
 {
@@ -19,6 +20,7 @@ public class Contrato
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
 
+    [Range(1, int.MaxValue, ErrorMessage = "El precio debe ser un número entero positivo")]
     public decimal Precio { get; set; }
     public int Estado { get; set; }
 

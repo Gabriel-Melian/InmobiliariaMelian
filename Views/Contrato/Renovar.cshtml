@@ -1,0 +1,54 @@
+@model net.Models.Contrato
+
+<div class="modal fade" id="renovarModal" tabindex="-1" aria-labelledby="renovarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Renovar Contrato</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <form asp-action="Renovar" method="post">
+                <div class="modal-body">
+                    @* El nuevo contrato siempre tiene un ID = 0 *@
+                    <input type="hidden" asp-for="ContratoId" value="0" />
+                    <input type="hidden" asp-for="InquilinoId" />
+                    <input type="hidden" asp-for="InmuebleId" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Inquilino</label>
+                        <input class="form-control" value="@($"{Model.Inquilino?.Nombre} {Model.Inquilino?.Apellido}")" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Inmueble</label>
+                        <input class="form-control" value="@($"{Model.Inmueble?.Direccion} ({Model.Inmueble?.TipoInmueble?.Valor}, {Model.Inmueble?.UsoInmueble?.UsoValor})")" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FechaInicio" class="form-label">Desde</label>
+                        <input asp-for="FechaInicio" type="date" class="form-control" id="inicio" />
+                        <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FechaFin" class="form-label">Hasta</label>
+                        <input asp-for="FechaFin" type="date" class="form-control" id="fin" />
+                        <span asp-validation-for="FechaFin" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Precio" class="form-label">Nuevo precio</label>
+                        <input asp-for="Precio" class="form-control" value="@Model.Precio.ToString("0", new System.Globalization.CultureInfo("es-AR"))" />
+                        <span asp-validation-for="Precio" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Renovar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

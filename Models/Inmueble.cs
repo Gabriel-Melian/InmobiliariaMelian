@@ -5,6 +5,10 @@ public class Inmueble
 {
     public int InmuebleId { get; set; }
 
+    [Required(ErrorMessage = "La dirección es obligatoria.")]
+    [MinLength(2, ErrorMessage = "La dirección debe tener al menos 2 caracteres.")]
+    public string? Direccion { get; set; }
+
     [Required(ErrorMessage = "La latitud es obligatoria.")]
     public string? Latitud { get; set; }
 
@@ -39,7 +43,8 @@ public class Inmueble
 
     public override string ToString()
     {
-        return $"{TipoInmueble?.Valor} {UsoInmueble?.UsoValor} - {Propietario?.Apellido}, {Propietario?.Nombre} ({Latitud}, {Longitud})";
+        return $"{Direccion} ({TipoInmueble}, {UsoInmueble})";
+        //return $"{TipoInmueble?.Valor} {UsoInmueble?.UsoValor} - {Propietario?.Apellido}, {Propietario?.Nombre} ({Latitud}, {Longitud})";
         /*var res = $"{Latitud} {Longitud} {IdPropietario} {IdUso} {IdTipo} {Ambientes} {Precio} {Estado}";
         return res;*/
     }

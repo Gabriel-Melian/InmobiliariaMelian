@@ -14,7 +14,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-                <p><strong>Inquilino:</strong> @($"{Model.Inquilino?.Nombre} {Model.Inquilino?.Apellido}")</p>
+                <p><strong>Inquilino:</strong> @($"{Model.Inquilino?.Nombre} {Model.Inquilino?.Apellido} DNI {Model.Inquilino?.Dni}")</p>
                 <p><strong>Inmueble:</strong> @Model.Inmueble?.ToString()</p>
                 <p><strong>Precio:</strong> @Model.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</p>
             </div>
@@ -40,6 +40,15 @@
         </div>
     </div>
 </div>
+
+<div class="mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
+        Renovar contrato
+    </button>
+</div>
+
+@*Modal de Renovacion!!*@
+@await Html.PartialAsync("Renovar", Model)
 
 <div class="mt-4">
     <a asp-action="Index" class="btn btn-outline-secondary">

@@ -27,6 +27,7 @@
 <table class="table table-bordered table-striped" id="inmueblesTable">
     <thead class="table-dark">
         <tr>
+            <th>Direccion</th>
             <th>Latitud</th>
             <th>Longitud</th>
             <th>Propietario</th>
@@ -42,6 +43,7 @@
         @foreach (var item in Model)
         {
             <tr class="@(item.Estado == 0 ? "bg-inactivos" : "")">
+                <td>@item.Direccion</td>
                 <td>@item.Latitud</td>
                 <td>@item.Longitud</td>
                 <td>@($"{item.Propietario?.Nombre} {item.Propietario?.Apellido}")</td>

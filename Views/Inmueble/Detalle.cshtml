@@ -14,13 +14,14 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
+                <p><strong>Dirección:</strong> @Model.Direccion</p>
                 <p><strong>Latitud:</strong> @Model.Latitud</p>
                 <p><strong>Longitud:</strong> @Model.Longitud</p>
                 <p><strong>Ambientes:</strong> @Model.Ambientes</p>
                 <p><strong>Precio:</strong> $ @Model.Precio</p>
             </div>
             <div class="col-md-6">
-                <p><strong>Propietario:</strong> @($"{Model.Propietario?.Nombre} {Model.Propietario?.Apellido} - DNI: {Model.Propietario?.Dni}")</p>
+                <p><strong>Propietario:</strong> @($"{Model.Propietario?.Nombre} {Model.Propietario?.Apellido} DNI {Model.Propietario?.Dni}")</p>
                 <p><strong>Uso:</strong> @Model.UsoInmueble?.UsoValor</p>
                 <p><strong>Tipo:</strong> @Model.TipoInmueble?.Valor</p>
                 <p>
@@ -50,17 +51,31 @@
                 <th>Fecha fin</th>
                 <th>Precio</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         @foreach (var contrato in Model.Contratos)
         {
             <tr>
-                <td>@($"{contrato.Inquilino?.Nombre} {contrato.Inquilino?.Apellido}")</td>
+                <td>@($"{contrato.Inquilino?.Nombre} {contrato.Inquilino?.Apellido} DNI {contrato.Inquilino?.Dni}")</td>
                 <td>@contrato.FechaInicio.ToString("dd/MM/yyyy")</td>
                 <td>@contrato.FechaFin.ToString("dd/MM/yyyy")</td>
                 <td>@contrato.Precio.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
                 <td>@(contrato.Estado == 1 ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a href="/Contrato/Detalle/@contrato.ContratoId" title="Ver detalle" class="me-2"><i class="fa-solid fa-eye"></i></a>
+                    @if (contrato.Estado == 1)
+                    {
+                        <a href="/Contrato/Edicion/@contrato.ContratoId" title="Editar" class="me-2"><i class="fa-solid fa-pen-to-square"></i></a>
+                        
+                        <a href="#" data-url="/Contrato/Anular/@contrato.ContratoId" class="text-danger anular me-2" title="Anular contrato"><i class="fa-solid fa-ban"></i></a>
+                    }
+                    else
+                    {
+                        <a href="#" data-url="/Contrato/Activar/@contrato.ContratoId" class="text-success activar me-2" title="Reactivar contrato"><i class="fa-solid fa-rotate-left"></i></a>
+                    }
+                </td>
             </tr>
         }
         </tbody>
@@ -76,3 +91,35 @@ else
         <i class="fa-solid fa-arrow-left"></i> Volver al listado
     </a>
 </div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.anular').on('click', function (e) {
+                e.preventDefault();
+                const url = $(this).data('url');
+                Swal.fire({
+                    title: "¿Anular contrato?",
+                    text: "El contrato quedará inactivo",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Anular",
+                    cancelButtonText: "Cancelar"
+                }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+            });
+
+            $('.activar').on('click', function (e) {
+                e.preventDefault();
+                const url = $(this).data('url');
+                Swal.fire({
+                    title: "¿Reactivar contrato?",
+                    text: "El contrato volverá a estar vigente",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Reactivar",
+                    cancelButtonText: "Cancelar"
+                }).then((r) => { if (r.isConfirmed) window.location.href = url; });
+            });
+        });
+    </script>
+}

@@ -70,7 +70,7 @@ else
         {
             <tr>
                 <td>
-                    @($"{inmueble.TipoInmueble?.Valor} {inmueble.UsoInmueble?.UsoValor} - Latitud: {inmueble.Latitud}, Longitud: {inmueble.Longitud}")
+                    @($"{inmueble.Direccion} ({inmueble.TipoInmueble?.Valor}, {inmueble.UsoInmueble?.UsoValor})")
                 </td>
                 <td>@inmueble.Precio?.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
                 <td>

@@ -46,7 +46,7 @@
 
                     <div class="mb-3">
                         <label asp-for="Precio" class="form-label"></label>
-                        <input asp-for="Precio" class="form-control" />
+                        <input asp-for="Precio" class="form-control" value="@Model.Precio.ToString("0", new System.Globalization.CultureInfo("es-AR"))" />
                         <span asp-validation-for="Precio" class="text-danger"></span>
                     </div>
                 </div>

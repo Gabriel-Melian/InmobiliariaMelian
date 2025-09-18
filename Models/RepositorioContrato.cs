@@ -30,10 +30,17 @@ public class RepositorioContrato : RepositorioBase
                 i.dni AS DniInq,
                 
                 inm.id AS InmuebleId,
+                inm.direccion AS Direccion,
                 inm.latitud AS Latitud,
                 inm.longitud AS Longitud,
                 inm.precio AS PrecioInmueble,
                 inm.idPropietario AS PropietarioId,
+                
+                t.id AS TipoId,
+                t.valor AS TipoValor,
+                
+                u.id AS UsoId,
+                u.valor AS UsoValor,
                 
                 p.id AS PropietarioId,
                 p.nombre AS NombreP,
@@ -42,7 +49,9 @@ public class RepositorioContrato : RepositorioBase
             FROM contrato c
             INNER JOIN inquilino i ON i.id = c.idInquilino
             INNER JOIN inmueble inm ON inm.id = c.idInmueble
-            INNER JOIN propietario p ON p.id = inm.idPropietario;";
+            INNER JOIN propietario p ON p.id = inm.idPropietario
+            INNER JOIN tipoinmueble t ON t.id = inm.idTipoInmueble
+            INNER JOIN usoinmueble u ON u.id = inm.idUsoInmueble;";
 
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -77,6 +86,7 @@ public class RepositorioContrato : RepositorioBase
                         Inmueble = new Inmueble
                         {
                             InmuebleId = reader.GetInt32("InmuebleId"),
+                            Direccion = reader.GetString("Direccion"),
                             Latitud = reader.GetString("Latitud"),
                             Longitud = reader.GetString("Longitud"),
                             Precio = reader.GetDecimal("PrecioInmueble"),
@@ -87,6 +97,16 @@ public class RepositorioContrato : RepositorioBase
                                 Nombre = reader.GetString("NombreP"),
                                 Apellido = reader.GetString("ApellidoP"),
                                 Dni = reader.GetString("DniP")
+                            },
+                            TipoInmueble = new TipoInmueble
+                            {
+                                TipoId = reader.GetInt32("TipoId"),
+                                Valor = reader.GetString("TipoValor")
+                            },
+                            UsoInmueble = new UsoInmueble
+                            {
+                                UsoId = reader.GetInt32("UsoId"),
+                                UsoValor = reader.GetString("UsoValor")
                             }
                         }
                     });
@@ -121,6 +141,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.precio AS PrecioInmueble,
@@ -167,6 +188,7 @@ public class RepositorioContrato : RepositorioBase
                         Inmueble = new Inmueble
                         {
                             InmuebleId = reader.GetInt32("InmuebleId"),
+                            Direccion = reader.GetString("Direccion"),
                             Latitud = reader.GetString("Latitud"),
                             Longitud = reader.GetString("Longitud"),
                             Precio = reader.GetDecimal("PrecioInmueble"),
@@ -211,6 +233,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.precio AS PrecioInmueble,
@@ -257,6 +280,7 @@ public class RepositorioContrato : RepositorioBase
                         Inmueble = new Inmueble
                         {
                             InmuebleId = reader.GetInt32("InmuebleId"),
+                            Direccion = reader.GetString("Direccion"),
                             Latitud = reader.GetString("Latitud"),
                             Longitud = reader.GetString("Longitud"),
                             Precio = reader.GetDecimal("PrecioInmueble"),
@@ -302,6 +326,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.precio AS PrecioInmueble,
@@ -348,6 +373,7 @@ public class RepositorioContrato : RepositorioBase
                         Inmueble = new Inmueble
                         {
                             InmuebleId = reader.GetInt32("InmuebleId"),
+                            Direccion = reader.GetString("Direccion"),
                             Latitud = reader.GetString("Latitud"),
                             Longitud = reader.GetString("Longitud"),
                             Precio = reader.GetDecimal("PrecioInmueble"),
@@ -419,6 +445,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.idPropietario AS PropietarioId,
@@ -473,6 +500,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.idPropietario AS PropietarioId,
@@ -529,6 +557,7 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS Inmueble_Id,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.idPropietario AS Propietario_Id,
@@ -584,10 +613,17 @@ public class RepositorioContrato : RepositorioBase
                     i.dni AS DniInquilino,
 
                     inm.id AS InmuebleId,
+                    inm.direccion AS Direccion,
                     inm.latitud AS Latitud,
                     inm.longitud AS Longitud,
                     inm.idPropietario AS PropietarioId,
                     inm.precio AS PrecioInmueble,
+
+                    t.id AS TipoId,
+                    t.valor AS TipoValor,
+
+                    u.id AS UsoId,
+                    u.valor AS UsoValor,
 
                     p.id AS PropietarioId,
                     p.nombre AS NombreP,
@@ -597,7 +633,9 @@ public class RepositorioContrato : RepositorioBase
                 INNER JOIN inquilino i ON i.id = c.idInquilino
                 INNER JOIN inmueble inm ON inm.id = c.idInmueble
                 INNER JOIN propietario p ON p.id = inm.idPropietario
-                WHERE c.idInquilino = @id";
+                INNER JOIN tipoinmueble t ON t.id = inm.idTipoInmueble
+                INNER JOIN usoinmueble u ON u.id = inm.idUsoInmueble
+                WHERE c.idInquilino = @id;";
 
             using (var command = new MySqlCommand(query, connection))
             {
@@ -749,6 +787,7 @@ public class RepositorioContrato : RepositorioBase
             Inmueble = new Inmueble
             {
                 InmuebleId = reader.GetInt32("InmuebleId"),
+                Direccion = reader.GetString("Direccion"),
                 Latitud = reader.GetString("Latitud"),
                 Longitud = reader.GetString("Longitud"),
                 Precio = reader.GetDecimal("PrecioInmueble"),
@@ -759,6 +798,16 @@ public class RepositorioContrato : RepositorioBase
                     Nombre = reader.GetString("NombreP"),
                     Apellido = reader.GetString("ApellidoP"),
                     Dni = reader.GetString("DniP")
+                },
+                TipoInmueble = new TipoInmueble
+                {
+                    TipoId = reader.GetInt32("TipoId"),
+                    Valor = reader.GetString("TipoValor")
+                },
+                UsoInmueble = new UsoInmueble
+                {
+                    UsoId = reader.GetInt32("UsoId"),
+                    UsoValor = reader.GetString("UsoValor")
                 }
             }
         };
@@ -792,6 +841,7 @@ public class RepositorioContrato : RepositorioBase
             Inmueble = new Inmueble
             {
                 InmuebleId = reader.GetInt32("Inmueble_Id"),//Agregue _
+                Direccion = reader.GetString("Direccion"),
                 Latitud = reader.GetString("Latitud"),
                 Longitud = reader.GetString("Longitud"),
                 Precio = reader.GetDecimal("PrecioInmueble"),

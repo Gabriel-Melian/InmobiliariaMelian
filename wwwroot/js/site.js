@@ -50,8 +50,8 @@ $(document).ready(function () {
 
     $('#inmueblesTable').DataTable({
         "columnDefs": [
-            { "orderable": false, "targets": 8 },
-            { "width": "150px", "targets": 8 }
+            { "orderable": false, "targets": 9 },
+            { "width": "150px", "targets": 9 }
         ],
         "language": {
             "emptyTable": "No hay datos",

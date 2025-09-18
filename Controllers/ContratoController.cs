@@ -71,9 +71,8 @@ public class ContratoController : Controller
             .Select(i => new
             {
                 i.InmuebleId,
-                Display = $"{i.Latitud} - {i.Longitud}"
+                Display = $"{i.Direccion} ({i.TipoInmueble.Valor}, {i.UsoInmueble.UsoValor})"
             }).ToList();
-        //!!!!!Aca tengo un error que me esta trayendo a "Pedro Gonzalez" como si fuera un INT, REVISAR REPOSITORIO!!!!!
         ViewBag.Inquilinos = new SelectList(inquilinos, "InquilinoId", "Display", inquilinos?.First().InquilinoId);//Eso hay que chequearlo
         ViewBag.Inmuebles = new SelectList(inmuebles, "InmuebleId", "Display", inmuebles?.First().InmuebleId);//inquilinos?.First().InquilinoId
 
@@ -107,6 +106,30 @@ public class ContratoController : Controller
             TempData["Mensaje"] = "Cambios guardados";
         }
 
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public IActionResult Renovar(Contrato contrato)
+    {
+        if (VerificarDisponibilidad(contrato.FechaInicio, contrato.FechaFin, contrato.InmuebleId))
+        {
+            TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
+            return RedirectToAction("Edicion", new { id = contrato.ContratoId });
+        }
+
+        //repo.Modificar(contrato);
+        //TempData["Mensaje"] = "Cambios guardados";
+        //return RedirectToAction("Index");
+
+        contrato.ContratoId = 0;//Porque seria un Nuevo Contrato
+        contrato.UsuarioCreadorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        contrato.FechaCreacion = DateTime.Now;
+        contrato.Estado = 1;
+        
+        repo.Alta(contrato);
+
+        TempData["Mensaje"] = "Contrato renovado correctamente";
         return RedirectToAction("Index");
     }
 

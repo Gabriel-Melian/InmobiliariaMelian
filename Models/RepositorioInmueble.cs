@@ -12,6 +12,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
             SELECT 
                 i.id AS InmuebleId,
+                i.direccion AS Direccion,
                 i.latitud AS Latitud,
                 i.longitud AS Longitud,
                 i.idPropietario AS IdPropietario,
@@ -46,6 +47,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmuebles.Add(new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -87,6 +89,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
                 SELECT 
                     i.id            AS InmuebleId,
+                    i.direccion     AS Direccion,
                     i.latitud       AS Latitud,
                     i.longitud      AS Longitud,
                     i.idPropietario AS IdPropietario,
@@ -122,6 +125,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmuebles.Add(new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -164,6 +168,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
                 SELECT 
                     i.id            AS InmuebleId,
+                    i.direccion     AS Direccion,
                     i.latitud       AS Latitud,
                     i.longitud      AS Longitud,
                     i.idPropietario AS IdPropietario,
@@ -204,6 +209,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmuebles.Add(new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -246,6 +252,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
                 SELECT 
                     i.id            AS InmuebleId,
+                    i.direccion     AS Direccion,
                     i.latitud       AS Latitud,
                     i.longitud      AS Longitud,
                     i.idPropietario AS IdPropietario,
@@ -280,6 +287,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmuebles.Add(new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -322,6 +330,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
                 SELECT 
                     i.id            AS InmuebleId,
+                    i.direccion     AS Direccion,
                     i.latitud       AS Latitud,
                     i.longitud      AS Longitud,
                     i.idPropietario AS IdPropietario,
@@ -357,6 +366,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmueble = new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -399,6 +409,7 @@ public class RepositorioInmueble : RepositorioBase
             var query = @"
                 SELECT 
                     i.id            AS InmuebleId,
+                    i.direccion     AS Direccion,
                     i.latitud       AS Latitud,
                     i.longitud      AS Longitud,
                     i.idPropietario AS IdPropietario,
@@ -435,6 +446,7 @@ public class RepositorioInmueble : RepositorioBase
                     inmuebles.Add(new Inmueble
                     {
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -476,17 +488,19 @@ public class RepositorioInmueble : RepositorioBase
         {
             var query = @"
                 INSERT INTO inmueble 
-                (latitud, 
+                (direccion,
+                latitud, 
                 longitud, 
                 idPropietario, 
                 idUsoInmueble, 
                 idTipoInmueble, 
                 ambientes, 
                 precio)
-                VALUES (@latitud, @longitud, @idPropietario, @idUsoInmueble, @idTipoInmueble, @ambientes, @precio);
+                VALUES (@direccion, @latitud, @longitud, @idPropietario, @idUsoInmueble, @idTipoInmueble, @ambientes, @precio);
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
+                command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
                 command.Parameters.AddWithValue("@latitud", inmueble.Latitud);
                 command.Parameters.AddWithValue("@longitud", inmueble.Longitud);
                 command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
@@ -509,7 +523,8 @@ public class RepositorioInmueble : RepositorioBase
         {
             var query = @"
                 UPDATE inmueble
-                SET latitud = @latitud,
+                SET direccion = @direccion,
+                    latitud = @latitud,
                     longitud = @longitud,
                     idPropietario = @idPropietario,
                     idUsoInmueble = @idUsoInmueble,
@@ -519,6 +534,7 @@ public class RepositorioInmueble : RepositorioBase
                 WHERE id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
+                command.Parameters.AddWithValue("@direccion", inmueble.Direccion);
                 command.Parameters.AddWithValue("@latitud", inmueble.Latitud);
                 command.Parameters.AddWithValue("@longitud", inmueble.Longitud);
                 command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
