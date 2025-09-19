@@ -195,7 +195,7 @@ public class RepositorioInmueble : RepositorioBase
                 WHERE i.estado = 1 AND p.estado = 1 AND i.id NOT IN (
                     SELECT idInmueble
                     FROM contrato
-                    WHERE desde <= @fechaDesde AND hasta >= @fechaHasta
+                    WHERE estado = 1 AND (contrato.desde <= @fechaHasta AND contrato.hasta >= @fechaDesde)
                 )";//Devuelve inmuebles activos con propietarios activos y que no esten reservados
 
             using (MySqlCommand command = new MySqlCommand(query, connection))

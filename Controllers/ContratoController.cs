@@ -87,7 +87,7 @@ public class ContratoController : Controller
     [HttpPost]
     public IActionResult Guardar(Contrato contrato)
     {
-        if (VerificarDisponibilidad(contrato.FechaInicio, contrato.FechaFin, contrato.InmuebleId))
+        if (VerificarDisponibilidad(contrato.FechaInicio, contrato.FechaFin, contrato.InmuebleId, contrato.ContratoId))
         {
             TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
             return RedirectToAction("Edicion", new { id = contrato.ContratoId });
@@ -112,7 +112,7 @@ public class ContratoController : Controller
     [HttpPost]
     public IActionResult Renovar(Contrato contrato)
     {
-        if (VerificarDisponibilidad(contrato.FechaInicio, contrato.FechaFin, contrato.InmuebleId))
+        if (VerificarDisponibilidad(contrato.FechaInicio, contrato.FechaFin, contrato.InmuebleId, contrato.ContratoId))
         {
             TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
             return RedirectToAction("Edicion", new { id = contrato.ContratoId });
@@ -133,11 +133,9 @@ public class ContratoController : Controller
         return RedirectToAction("Index");
     }
 
-    private bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble)
+    private bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble, int? idContrato = null)
     {
-        var desde = inicio.ToString("yyyy-MM-dd");
-        var hasta = fin.ToString("yyyy-MM-dd");
-        return repo.EstaOcupado(idInmueble, inicio, fin);
+        return repo.EstaOcupado(idInmueble, inicio, fin, idContrato);
     }
 
     public IActionResult Eliminar(int id)
@@ -148,7 +146,7 @@ public class ContratoController : Controller
             return Redirect("/Home/Index");
         }
 
-        int anuladorId = int.Parse(User.Claims.First().Value);
+        int anuladorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         int res = repo.Baja(id, anuladorId, DateTime.Now);
 
         TempData[res == -1 ? "Error" : "Mensaje"] =

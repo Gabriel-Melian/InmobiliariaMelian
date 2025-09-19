@@ -394,7 +394,7 @@ public class RepositorioContrato : RepositorioBase
         return contratos;
     }
 
-    public bool EstaOcupado(int idInmueble, DateTime desde, DateTime hasta)
+    public bool EstaOcupado(int idInmueble, DateTime inicio, DateTime fin, int? idContrato = null)
     {
         bool ocupado = false;
         using (var connection = new MySqlConnection(ConnectionString))
@@ -403,18 +403,24 @@ public class RepositorioContrato : RepositorioBase
                 SELECT COUNT(*)
                 FROM contrato c
                 WHERE c.idInmueble = @idInmueble
-                AND (c.desde <= @hasta AND c.hasta >= @desde)
-                AND c.estado = 1";
+                AND estado = 1
+                AND (
+                    (@inicio BETWEEN c.desde AND c.hasta)
+                    OR (@fin BETWEEN c.desde AND c.hasta)
+                    OR (c.desde BETWEEN @inicio AND @fin)
+                )
+                AND (@idContrato IS NULL OR c.id <> @idContrato)";//excluye contrato actual si corresponde
 
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@idInmueble", idInmueble);
-                command.Parameters.AddWithValue("@desde", desde);
-                command.Parameters.AddWithValue("@hasta", hasta);
+                command.Parameters.AddWithValue("@inicio", inicio);
+                command.Parameters.AddWithValue("@fin", fin);
+                command.Parameters.AddWithValue("@idContrato", (object?)idContrato ?? DBNull.Value);
 
                 connection.Open();
                 var result = Convert.ToInt32(command.ExecuteScalar());
-                ocupado = result > 0;//Si result es mayor a 0, entonces esta ocupado y devuelve true
+                ocupado = result > 0;//Si devuelve mayor a 0, esta ocupado
             }
         }
         return ocupado;
