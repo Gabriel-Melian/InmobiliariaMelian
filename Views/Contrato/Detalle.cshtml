@@ -41,17 +41,181 @@
     </div>
 </div>
 
-<div class="mt-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
-        Renovar contrato
-    </button>
-</div>
-
-@*Modal de Renovacion!!*@
-@await Html.PartialAsync("Renovar", Model)
-
-<div class="mt-4">
+<div class="mb-4 d-flex justify-content-between">
     <a asp-action="Index" class="btn btn-outline-secondary">
         <i class="fa-solid fa-arrow-left"></i> Volver al listado
     </a>
+    <div>
+        <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#nuevoPagoModal">
+            <i class="fa-solid fa-dollar-sign"></i> Nuevo pago
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
+            <i class="fa-solid fa-arrows-rotate"></i> Renovar contrato
+        </button>
+    </div>
 </div>
+
+<!--Table pagos-->
+<h4 class="mt-4">Pagos asociados</h4>
+@if (Model.Pagos != null && Model.Pagos.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>N°</th>
+                <th>Fecha</th>
+                <th>Importe</th>
+                <th>Detalles</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var pago in Model.Pagos)
+        {
+            <tr>
+                <td>@pago.Numero</td>
+                <td>@pago.Fecha.ToString("dd/MM/yyyy")</td>
+                <td>@pago.Importe.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
+                <td>@pago.Detalles</td>
+                <td>
+                    @if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pendiente)
+                    {
+                        <span class="badge bg-warning text-dark">Pendiente</span>
+                    }
+                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pagado)
+                    {
+                        <span class="badge bg-success">Pagado</span>
+                    }
+                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Anulado)
+                    {
+                        <span class="badge bg-secondary">Anulado</span>
+                    }
+                </td>
+                <td>
+                    <!-- Editar (solo si no esta anulado) -->
+                    @if (pago.Estado != (int)net.Models.Pago.EstadoPago.Anulado)
+                    {
+                        <a href="/Pago/Edicion/@pago.PagoId" class="me-2" title="Editar detalles"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+
+                    <!-- Btn cambiar estado -->
+                    @if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pendiente)
+                    {
+                        <!-- Si esta pendiente, muestro icono para marcar como pagado -->
+                        <a href="/Pago/Pagado/@pago.PagoId" class="text-success me-2" title="Marcar como pagado"><i class="fa-solid fa-check-circle"></i></a>
+
+                        <!-- Opcion anular no tiene vuelta atras -->
+                        <a href="/Pago/Anular/@pago.PagoId" class="text-danger" title="Anular pago"><i class="fa-solid fa-ban"></i></a>
+                    }
+                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pagado)
+                    {
+                        <!-- Si esta pagado, hay opcion para volver a pendiente -->
+                        <a href="/Pago/Pendiente/@pago.PagoId" class="text-warning me-2" title="Marcar como pendiente"><i class="fa-solid fa-rotate-left"></i></a>
+
+                        <!-- Opcion de anular -->
+                        <a href="/Pago/Anular/@pago.PagoId" class="text-danger" title="Anular pago"><i class="fa-solid fa-ban"></i></a>
+                    }
+                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Anulado)
+                    {
+                        <!-- Si esta anulado, muestro candado -->
+                        <span class="text-muted" title="Pago anulado"><i class="fa-solid fa-lock"></i></span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay pagos registrados para este contrato.</p>
+}
+
+<!--Table Multas-->
+<h4 class="mt-4">Multas asociadas</h4>
+@if (Model.Multas != null && Model.Multas.Any())
+{
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Fecha aviso</th>
+                <th>Fecha terminación</th>
+                <th>Monto</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var multa in Model.Multas)
+        {
+            <tr>
+                <td>@multa.FechaAviso.ToString("dd/MM/yyyy")</td>
+                <td>@multa.FechaTerminacion.ToString("dd/MM/yyyy")</td>
+                <td>@multa.Monto.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
+                <td>
+                    @if (multa.Estado == (int)net.Models.Multa.EstadoMulta.Activa)
+                    {
+                        <span class="badge bg-warning text-dark">Activa</span>
+                    }
+                    else if (multa.Estado == (int)net.Models.Multa.EstadoMulta.Resuelta)
+                    {
+                        <span class="badge bg-success">Resuelta</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Anulada</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay multas registradas para este contrato.</p>
+}
+
+<!-- Modal Renovar-->
+@await Html.PartialAsync("Renovar", Model)
+
+<!-- Modal Nuevo Pago -->
+@await Html.PartialAsync("/Views/Pago/Nuevo.cshtml", new net.Models.Pago { IdContrato = Model.ContratoId, PagoId = 0 })
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            //Delego eventos en todos los links de acciones
+            document.querySelectorAll("a[href*='/Pago/']").forEach(link => {
+                link.addEventListener("click", function (e) {
+                    const url = this.getAttribute("href");
+
+                    if (url.includes("Edicion")) return;
+
+                    e.preventDefault();
+
+                    let accion = "";
+
+                    if (url.includes("Anular")) accion = "anular";
+                    else if (url.includes("Pendiente")) accion = "marcar como pendiente";
+                    else if (url.includes("Pagado")) accion = "marcar como pagado";
+
+                    Swal.fire({
+                        title: "¿Está seguro?",
+                        text: `Esto va a ${accion} este pago.`,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Sí, confirmar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

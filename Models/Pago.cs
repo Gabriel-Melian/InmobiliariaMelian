@@ -9,7 +9,7 @@ public class Pago
         Pagado = 1,
         Anulado = 2
     }
-    public int Id { get; set; }
+    public int PagoId { get; set; }
     public int IdContrato { get; set; }
     public int Numero { get; set; }
     public decimal Importe { get; set; }
@@ -18,7 +18,9 @@ public class Pago
     public int Estado { get; set; }
 
     public EstadoPago Tipo => (EstadoPago)Estado;
-    public Contrato contrato { get; set; }
+
+    //Relacion con el contrato
+    public Contrato? Contrato { get; set; }
 
     public override string ToString()
     {

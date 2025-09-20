@@ -1,0 +1,39 @@
+@model net.Models.Pago
+
+@{
+    ViewData["Title"] = "Editar Pago";
+}
+
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Editar detalles del pago</h2>
+</div>
+
+<div class="card shadow-lg border-0">
+    <div class="card-body">
+        <form asp-action="Guardar" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="PagoId" />
+            <input type="hidden" asp-for="IdContrato" />
+            <input type="hidden" asp-for="Numero" />
+            <input type="hidden" asp-for="Importe" />
+            <input type="hidden" asp-for="Fecha" />
+            <input type="hidden" asp-for="Estado" />
+
+            <div class="mb-3">
+                <label asp-for="Detalles" class="form-label"></label>
+                <textarea asp-for="Detalles" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Detalles" class="text-danger"></span>
+            </div>
+
+            <div class="mt-3">
+                <a asp-action="Detalle" asp-controller="Contrato" asp-route-id="@Model.IdContrato"
+                   class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-save"></i> Guardar cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

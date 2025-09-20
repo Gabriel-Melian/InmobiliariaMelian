@@ -1,0 +1,52 @@
+@model net.Models.Pago
+
+<div class="modal fade" id="nuevoPagoModal" tabindex="-1" aria-labelledby="nuevoPagoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Pago" asp-action="Guardar" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nuevoPagoLabel">
+                        <i class="fa-solid fa-dollar-sign"></i> Registrar nuevo pago
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" asp-for="IdContrato" />
+
+                    <div class="mb-3">
+                        <label asp-for="Numero" class="form-label"></label>
+                        <input asp-for="Numero" class="form-control" placeholder="Número de pago (ej: 1, 2, 3...)" />
+                        <span asp-validation-for="Numero" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Importe" class="form-label"></label>
+                        <input asp-for="Importe" class="form-control" placeholder="Importe del pago" />
+                        <span asp-validation-for="Importe" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Fecha" class="form-label"></label>
+                        <input asp-for="Fecha" type="date" class="form-control" />
+                        <span asp-validation-for="Fecha" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Detalles" class="form-label"></label>
+                        <textarea asp-for="Detalles" class="form-control" rows="3" placeholder="Detalles opcionales..."></textarea>
+                        <span asp-validation-for="Detalles" class="text-danger"></span>
+                    </div>
+
+                    <input type="hidden" asp-for="Estado" value="1" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa-solid fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

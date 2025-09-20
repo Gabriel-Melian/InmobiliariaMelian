@@ -14,7 +14,9 @@ public class ContratoController : Controller
     private readonly ILogger<ContratoController> _logger;
     private RepositorioContrato repo = new RepositorioContrato();
 
-    //private RepositorioPago repoPago = new RepositorioPago();
+    private RepositorioPago repoPago = new RepositorioPago();
+
+    private RepositorioMulta repoMulta = new RepositorioMulta();
     private readonly RepositorioInquilino repoInquilino = new RepositorioInquilino();
     private RepositorioInmueble repoInmueble = new RepositorioInmueble();
 
@@ -52,7 +54,8 @@ public class ContratoController : Controller
 
         contrato.Inquilino = repoInquilino.ObtenerUno(contrato.InquilinoId);
         contrato.Inmueble = repoInmueble.ObtenerUno(contrato.InmuebleId);
-        //contrato.Pagos = repoPago.ObtenerPorContrato(id);
+        contrato.Pagos = repoPago.ObtenerPorContrato(id);//Estuve testeando y funciona
+        contrato.Multas = repoMulta.ObtenerPorContrato(id);//Falta testear
 
         return View(contrato);
     }

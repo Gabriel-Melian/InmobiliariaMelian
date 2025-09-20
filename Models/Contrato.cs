@@ -38,6 +38,7 @@ public class Contrato
 
     //Relacion con clase Pago -> 1:N
     public List<Pago>? Pagos { get; set; }
+    public List<Multa>? Multas { get; set; }
 
     public override string ToString()
     {
