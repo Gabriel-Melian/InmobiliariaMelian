@@ -325,4 +325,15 @@ public class RepositorioMulta : RepositorioBase
         }
         return res;
     }
+
+    public decimal CalcularMulta(Contrato contrato, DateTime fechaTerminacion)
+    {
+        var duracionTotal = (contrato.FechaFin - contrato.FechaInicio).TotalDays;
+        var transcurrido = (fechaTerminacion - contrato.FechaInicio).TotalDays;
+
+        if (transcurrido < duracionTotal / 2)
+            return contrato.Precio * 2;
+        else
+            return contrato.Precio * 1;
+    }
 }

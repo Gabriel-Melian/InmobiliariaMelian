@@ -11,8 +11,8 @@ public class PagoController : Controller
 
     private readonly ILogger<PagoController> _logger;
     private RepositorioPago repo = new RepositorioPago();
-    private readonly RepositorioPago repoInquilino = new RepositorioPago();
-    private RepositorioPago repoInmueble = new RepositorioPago();
+    //private readonly RepositorioPago repoInquilino = new RepositorioPago();
+    //private RepositorioPago repoInmueble = new RepositorioPago();
 
     public PagoController(ILogger<PagoController> logger)
     {

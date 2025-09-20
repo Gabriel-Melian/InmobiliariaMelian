@@ -1,0 +1,40 @@
+@model net.Models.Contrato
+
+<div class="modal fade" id="finalizarContratoModal" tabindex="-1" aria-labelledby="finalizarContratoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Multa" asp-action="Generar" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="contratoId" value="@Model.ContratoId" />
+
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="finalizarContratoLabel">
+                        <i class="fa-solid fa-calendar-xmark"></i> Finalizar contrato anticipadamente
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-muted">
+                        Seleccione la fecha en que se hará efectiva la terminación anticipada del contrato.
+                        El sistema calculará automáticamente la multa según las reglas vigentes.
+                    </p>
+
+                    <div class="mb-3">
+                        <label for="fechaTerminacion" class="form-label">Fecha de terminación anticipada</label>
+                        <input type="date" class="form-control" id="fechaTerminacion" name="fechaTerminacion" required />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

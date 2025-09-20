@@ -52,6 +52,9 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
             <i class="fa-solid fa-arrows-rotate"></i> Renovar contrato
         </button>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#finalizarContratoModal">
+            <i class="fa-solid fa-calendar-xmark"></i> Finalizar anticipadamente
+        </button>
     </div>
 </div>
 
@@ -181,6 +184,9 @@ else
 
 <!-- Modal Nuevo Pago -->
 @await Html.PartialAsync("/Views/Pago/Nuevo.cshtml", new net.Models.Pago { IdContrato = Model.ContratoId, PagoId = 0 })
+
+<!-- Modal Multas -->
+@await Html.PartialAsync("FinalizarContrato", Model)
 
 @section Scripts {
     <script>
