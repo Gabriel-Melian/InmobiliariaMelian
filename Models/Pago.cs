@@ -15,6 +15,10 @@ public class Pago
     public decimal Importe { get; set; }
     public DateTime Fecha { get; set; }
     public string? Detalles { get; set; }
+    public int? UsuarioAltaId { get; set; }//Auditoria
+    public int? UsuarioBajaId { get; set; }
+    public Usuario? UsuarioAlta { get; set; }
+    public Usuario? UsuarioBaja { get; set; }
     public int Estado { get; set; }
 
     public EstadoPago Tipo => (EstadoPago)Estado;

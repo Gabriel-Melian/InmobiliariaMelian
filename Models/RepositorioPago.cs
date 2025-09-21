@@ -105,6 +105,16 @@ public class RepositorioPago : RepositorioBase
                     p.fecha AS Fecha, 
                     p.detalles AS Detalles,
                     p.estado AS Estado,
+                    p.idUsuarioCrea,
+                    p.idUsuarioAnula,
+
+                    uc.id AS UsuarioCreaId,
+                    uc.nombre AS NombreUsuarioCrea,
+                    uc.apellido AS ApellidoUsuarioCrea,
+
+                    ua.id AS UsuarioAnulaId,
+                    ua.nombre AS NombreUsuarioAnula,
+                    ua.apellido AS ApellidoUsuarioAnula,
 
                     c.id AS ContratoId,
                     c.desde AS FechaInicio,
@@ -126,6 +136,8 @@ public class RepositorioPago : RepositorioBase
                 INNER JOIN inmueble inm ON c.idInmueble = inm.id
                 INNER JOIN inquilino i ON c.idInquilino = i.id
                 INNER JOIN propietario pr ON inm.idPropietario = pr.id
+                LEFT JOIN usuario uc ON p.idUsuarioCrea = uc.id
+                LEFT JOIN usuario ua ON p.idUsuarioAnula = ua.id
                 WHERE p.id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -143,6 +155,21 @@ public class RepositorioPago : RepositorioBase
                         Fecha = reader.GetDateTime("Fecha"),
                         Detalles = reader.IsDBNull(reader.GetOrdinal("Detalles")) ? null : reader.GetString("Detalles"),
                         Estado = reader.GetInt32("Estado"),
+                        UsuarioAltaId = reader.IsDBNull(reader.GetOrdinal("idUsuarioCrea")) ? null : reader.GetInt32("idUsuarioCrea"),
+                        UsuarioBajaId = reader.IsDBNull(reader.GetOrdinal("idUsuarioAnula")) ? null : reader.GetInt32("idUsuarioAnula"),
+
+                        UsuarioAlta = reader.IsDBNull(reader.GetOrdinal("UsuarioCreaId")) ? null : new Usuario
+                        {
+                            UsuarioId = reader.GetInt32("UsuarioCreaId"),
+                            Nombre = reader.GetString("NombreUsuarioCrea"),
+                            Apellido = reader.GetString("ApellidoUsuarioCrea")
+                        },
+                        UsuarioBaja = reader.IsDBNull(reader.GetOrdinal("UsuarioAnulaId")) ? null : new Usuario
+                        {
+                            UsuarioId = reader.GetInt32("UsuarioAnulaId"),
+                            Nombre = reader.GetString("NombreUsuarioAnula"),
+                            Apellido = reader.GetString("ApellidoUsuarioAnula")
+                        },
 
                         Contrato = new Contrato
                         {
@@ -191,6 +218,16 @@ public class RepositorioPago : RepositorioBase
                     p.fecha AS Fecha, 
                     p.detalles AS Detalles,
                     p.estado AS Estado,
+                    p.idUsuarioCrea,
+                    p.idUsuarioAnula,
+
+                    uc.id AS UsuarioCreaId,
+                    uc.nombre AS NombreUsuarioCrea,
+                    uc.apellido AS ApellidoUsuarioCrea,
+
+                    ua.id AS UsuarioAnulaId,
+                    ua.nombre AS NombreUsuarioAnula,
+                    ua.apellido AS ApellidoUsuarioAnula,
 
                     c.id AS ContratoId,
                     c.desde AS FechaInicio,
@@ -212,6 +249,8 @@ public class RepositorioPago : RepositorioBase
                 INNER JOIN inmueble inm ON c.idInmueble = inm.id
                 INNER JOIN inquilino i ON c.idInquilino = i.id
                 INNER JOIN propietario pr ON inm.idPropietario = pr.id
+                LEFT JOIN usuario uc ON p.idUsuarioCrea = uc.id
+                LEFT JOIN usuario ua ON p.idUsuarioAnula = ua.id
                 WHERE p.idContrato = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -229,6 +268,21 @@ public class RepositorioPago : RepositorioBase
                         Fecha = reader.GetDateTime("Fecha"),
                         Detalles = reader.IsDBNull(reader.GetOrdinal("Detalles")) ? null : reader.GetString("Detalles"),
                         Estado = reader.GetInt32("Estado"),
+                        UsuarioAltaId = reader.IsDBNull(reader.GetOrdinal("idUsuarioCrea")) ? null : reader.GetInt32("idUsuarioCrea"),
+                        UsuarioBajaId = reader.IsDBNull(reader.GetOrdinal("idUsuarioAnula")) ? null : reader.GetInt32("idUsuarioAnula"),
+
+                        UsuarioAlta = reader.IsDBNull(reader.GetOrdinal("UsuarioCreaId")) ? null : new Usuario
+                        {
+                            UsuarioId = reader.GetInt32("UsuarioCreaId"),
+                            Nombre = reader.GetString("NombreUsuarioCrea"),
+                            Apellido = reader.GetString("ApellidoUsuarioCrea")
+                        },
+                        UsuarioBaja = reader.IsDBNull(reader.GetOrdinal("UsuarioAnulaId")) ? null : new Usuario
+                        {
+                            UsuarioId = reader.GetInt32("UsuarioAnulaId"),
+                            Nombre = reader.GetString("NombreUsuarioAnula"),
+                            Apellido = reader.GetString("ApellidoUsuarioAnula")
+                        },
 
                         Contrato = new Contrato
                         {
@@ -273,9 +327,10 @@ public class RepositorioPago : RepositorioBase
                 numero,
                 importe, 
                 fecha, 
-                detalles)
+                detalles,
+                idUsuarioCrea)
                 VALUES
-                (@idcontrato, @numero, @importe, @fecha, @detalles);
+                (@idcontrato, @numero, @importe, @fecha, @detalles, @idUsuarioCrea);
                 SELECT LAST_INSERT_ID();";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -284,6 +339,7 @@ public class RepositorioPago : RepositorioBase
                 command.Parameters.AddWithValue("@importe", pago.Importe);
                 command.Parameters.AddWithValue("@fecha", pago.Fecha);
                 command.Parameters.AddWithValue("@detalles", pago.Detalles);
+                command.Parameters.AddWithValue("@idUsuarioCrea", pago.UsuarioAltaId);
                 connection.Open();//Ojo aca, estaba ejecutando tambien command.ExecuteNonQuery(); y se duplicaba el pago
                 res = Convert.ToInt32(command.ExecuteScalar());
                 connection.Close();
@@ -332,17 +388,19 @@ public class RepositorioPago : RepositorioBase
         return res;
     }
 
-    public int Anulado(int id)
+    public int Anulado(int id, int idUsuarioAnula)
     {
         int res = -1;
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
             var query = $@"UPDATE pago
-            SET estado = 2
+            SET idUsuarioAnula = @idUsuarioAnula,
+            estado = 2
             WHERE id = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@idUsuarioAnula", idUsuarioAnula);
                 connection.Open();
 
                 res = command.ExecuteNonQuery();

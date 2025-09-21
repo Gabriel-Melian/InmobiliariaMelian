@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
@@ -39,8 +40,11 @@ public class PagoController : Controller
             return View("Edicion", pago);
         }
 
+        var idUsuarioCrea = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
         if (pago.PagoId == 0)
         {
+            pago.UsuarioAltaId = idUsuarioCrea;
             repo.Agregar(pago);
             TempData["Mensaje"] = "Pago registrado correctamente.";
         }
@@ -58,7 +62,9 @@ public class PagoController : Controller
         var pago = repo.ObtenerUno(id);
         if (pago == null) return RedirectToAction("Index", "Contrato");
 
-        repo.Anulado(id);
+        var usuarioBajaId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        repo.Anulado(id, usuarioBajaId);
         TempData["Mensaje"] = "Pago anulado correctamente.";
         return RedirectToAction("Detalle", "Contrato", new { id = pago.IdContrato });
     }

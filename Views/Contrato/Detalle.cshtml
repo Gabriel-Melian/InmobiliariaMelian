@@ -71,6 +71,10 @@
                 <th>Detalles</th>
                 <th>Estado</th>
                 <th>Acciones</th>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <th>Auditoría</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -125,6 +129,27 @@
                         <span class="text-muted" title="Pago anulado"><i class="fa-solid fa-lock"></i></span>
                     }
                 </td>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <td>
+                        <small class="text-muted">
+                            Creado por:
+                            @if (pago.UsuarioAlta != null)
+                            {
+                                @($"{pago.UsuarioAlta.Nombre} {pago.UsuarioAlta.Apellido}")
+                            }
+                            else
+                            {
+                                <span class="fst-italic">Desconocido</span>
+                            }
+
+                            @if (pago.UsuarioBaja != null)
+                            {
+                                <p>Anulado por: @(pago.UsuarioBaja.Nombre + " " + pago.UsuarioBaja.Apellido)</p>
+                            }
+                        </small>
+                    </td>
+                }
             </tr>
         }
         </tbody>
