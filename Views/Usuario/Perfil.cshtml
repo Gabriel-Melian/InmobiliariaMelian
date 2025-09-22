@@ -1,0 +1,56 @@
+@model net.Models.Usuario
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <i class="fa-solid fa-user"></i> Mi Perfil
+            </div>
+            <div class="card-body">
+                <form asp-action="ActualizarPerfil" asp-controller="Usuario" method="post" enctype="multipart/form-data">
+                    <div class="text-center mb-3">
+                        <img src="@(string.IsNullOrEmpty(Model.Avatar) ? "/img/default-avatar.png" : Model.Avatar)" 
+                             class="rounded-circle" style="width:100px;height:100px;object-fit:cover;" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Dni" class="form-label"></label>
+                        <input asp-for="Dni" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nueva contraseña</label>
+                        <input type="password" name="nuevaPassword" class="form-control" placeholder="Dejar vacío para no cambiar" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Avatar</label>
+                        <input type="file" name="AvatarFile" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fa-solid fa-save"></i> Guardar cambios
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

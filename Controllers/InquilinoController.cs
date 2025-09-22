@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-//[Authorize]
+[Authorize]
 public class InquilinoController : Controller
 {
     private readonly ILogger<InquilinoController> _logger;
@@ -39,7 +39,8 @@ public class InquilinoController : Controller
         }
         return View(lista);
     }
-
+    
+    [Authorize(Roles = "Empleado")]
     public IActionResult Detalle(int id)
     {
         if (id == 0)
@@ -52,11 +53,12 @@ public class InquilinoController : Controller
             var contratos = repoContrato.ObtenerPorInquilino(id);
 
             ViewBag.Contratos = contratos;
-            
+
             return View(inquilino);
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         if (id == 0)
@@ -68,6 +70,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     public IActionResult Guardar(int id, Inquilino inquilino)
     {
@@ -95,6 +98,7 @@ public class InquilinoController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         //if (!User.IsInRole("Administrador"))
@@ -110,6 +114,7 @@ public class InquilinoController : Controller
         return RedirectToAction("Index");
     }
     
+    [Authorize(Roles = "Administrador")]
     public IActionResult Activar(int id)
     {
         //if (!User.IsInRole("Administrador"))

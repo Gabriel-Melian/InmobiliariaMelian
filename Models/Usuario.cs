@@ -17,12 +17,13 @@ public class Usuario
     public int Rol { get; set; }
     public string Dni { get; set; }
     public string? Avatar { get; set; }
+    public int Estado { get; set; }
 
     //Esto es para verificaciones en codigo if(usuario.RolEnum == Usuario.Roles.Administrador){}
     public Roles RolEnum => (Roles)Rol;
 
     public override string ToString()
     {
-        return $"{Nombre} {Apellido} {Dni}";
+        return $"{Nombre} {Apellido} {Dni} {Estado}";
     }
 }

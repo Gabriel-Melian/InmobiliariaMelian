@@ -45,17 +45,20 @@
     <a asp-action="Index" class="btn btn-outline-secondary">
         <i class="fa-solid fa-arrow-left"></i> Volver al listado
     </a>
-    <div>
-        <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#nuevoPagoModal">
-            <i class="fa-solid fa-dollar-sign"></i> Nuevo pago
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
-            <i class="fa-solid fa-arrows-rotate"></i> Renovar contrato
-        </button>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#finalizarContratoModal">
-            <i class="fa-solid fa-calendar-xmark"></i> Finalizar anticipadamente
-        </button>
-    </div>
+    @if (User.IsInRole("Empleado"))
+    {
+        <div>
+            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#nuevoPagoModal">
+                <i class="fa-solid fa-dollar-sign"></i> Nuevo pago
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renovarModal">
+                <i class="fa-solid fa-arrows-rotate"></i> Renovar contrato
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#finalizarContratoModal">
+                <i class="fa-solid fa-calendar-xmark"></i> Finalizar anticipadamente
+            </button>
+        </div>
+    }
 </div>
 
 <!--Table pagos-->
@@ -70,7 +73,10 @@
                 <th>Importe</th>
                 <th>Detalles</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                @if(User.IsInRole(role: "Empleado"))
+                {
+                    <th>Acciones</th>
+                }
                 @if (User.IsInRole("Administrador"))
                 {
                     <th>Auditoría</th>
@@ -85,20 +91,23 @@
                 <td>@pago.Fecha.ToString("dd/MM/yyyy")</td>
                 <td>@pago.Importe.ToString("C0", new System.Globalization.CultureInfo("es-AR"))</td>
                 <td>@pago.Detalles</td>
-                <td>
-                    @if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pendiente)
-                    {
-                        <span class="badge bg-warning text-dark">Pendiente</span>
-                    }
-                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pagado)
-                    {
-                        <span class="badge bg-success">Pagado</span>
-                    }
-                    else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Anulado)
-                    {
-                        <span class="badge bg-secondary">Anulado</span>
-                    }
-                </td>
+                @if (User.IsInRole("Empleado"))
+                {
+                    <td>
+                        @if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pendiente)
+                        {
+                            <span class="badge bg-warning text-dark">Pendiente</span>
+                        }
+                        else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Pagado)
+                        {
+                            <span class="badge bg-success">Pagado</span>
+                        }
+                        else if (pago.Estado == (int)net.Models.Pago.EstadoPago.Anulado)
+                        {
+                            <span class="badge bg-secondary">Anulado</span>
+                        }
+                    </td>
+                }
                 <td>
                     <!-- Editar (solo si no esta anulado) -->
                     @if (pago.Estado != (int)net.Models.Pago.EstadoPago.Anulado)

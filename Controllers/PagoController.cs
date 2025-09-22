@@ -6,7 +6,7 @@ using net.Models;
 
 namespace net.Controllers;
 
-//[Authorize]
+[Authorize]
 public class PagoController : Controller
 {
 
@@ -20,6 +20,7 @@ public class PagoController : Controller
         _logger = logger;
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         if (id == 0)
@@ -31,6 +32,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Guardar(Pago pago)
@@ -57,6 +59,7 @@ public class PagoController : Controller
         return RedirectToAction("Detalle", "Contrato", new { id = pago.IdContrato });
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Anular(int id)
     {
         var pago = repo.ObtenerUno(id);
@@ -69,6 +72,7 @@ public class PagoController : Controller
         return RedirectToAction("Detalle", "Contrato", new { id = pago.IdContrato });
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Pendiente(int id)
     {
         var pago = repo.ObtenerUno(id);
@@ -79,6 +83,7 @@ public class PagoController : Controller
         return RedirectToAction("Detalle", "Contrato", new { id = pago.IdContrato });
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Pagado(int id)
     {
         var pago = repo.ObtenerUno(id);

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-//[Authorize]
+[Authorize]
 public class PropietarioController : Controller
 {
     private readonly ILogger<PropietarioController> _logger;
@@ -41,7 +41,8 @@ public class PropietarioController : Controller
         }
         return View(lista);
     }
-
+    
+    [Authorize(Roles = "Empleado")]
     public IActionResult Detalle(int id)
     {
         if (id == 0)
@@ -55,12 +56,13 @@ public class PropietarioController : Controller
 
             var inmuebles = repoInmueble.ObtenerPorPropietario(id);
             propietario.Inmuebles = inmuebles;
-            
+
             //ViewBag.Inmuebles = repoInmueble.ObtenerPorPropietario(id);
             return View(propietario);
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     public IActionResult Guardar(int id, Propietario propietario)
     {
@@ -87,6 +89,7 @@ public class PropietarioController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         if (id == 0)
@@ -98,6 +101,7 @@ public class PropietarioController : Controller
         }
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         //if (!User.IsInRole("Administrador"))
@@ -122,12 +126,13 @@ public class PropietarioController : Controller
 
     }
     
+    [Authorize(Roles = "Administrador")]
     public IActionResult Activar(int id)
     {
         //if (!User.IsInRole("Administrador"))
         //{
-            //TempData["Error"] = "Acceso denegado";
-            //return Redirect("/Home/Index");
+        //TempData["Error"] = "Acceso denegado";
+        //return Redirect("/Home/Index");
         //}
         //primero me fijo que exista
         if (repo.ObtenerUno(id) == null)

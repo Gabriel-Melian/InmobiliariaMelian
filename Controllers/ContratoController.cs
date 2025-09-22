@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace net.Controllers;
 
-//[Authorize]
+[Authorize]
 public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;
@@ -46,6 +46,7 @@ public class ContratoController : Controller
         return View(lista);
     }
 
+    [Authorize]
     public IActionResult Detalle(int id)
     {
         var contrato = repo.ObtenerUno(id);
@@ -60,6 +61,7 @@ public class ContratoController : Controller
         return View(contrato);
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         //ViewBad para cargar inquilinos e inmuebles activos en los SelectList
@@ -86,7 +88,7 @@ public class ContratoController : Controller
         return View(contrato);
     }
 
-
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     public IActionResult Guardar(Contrato contrato)
     {
@@ -112,6 +114,7 @@ public class ContratoController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     public IActionResult Renovar(Contrato contrato)
     {
@@ -141,6 +144,7 @@ public class ContratoController : Controller
         return repo.EstaOcupado(idInmueble, inicio, fin, idContrato);
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Eliminar(int id)
     {
         if (!User.IsInRole("Administrador"))
@@ -158,6 +162,7 @@ public class ContratoController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Activar(int id)
     {
         if (!User.IsInRole("Administrador"))

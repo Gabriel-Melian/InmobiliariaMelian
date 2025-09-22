@@ -5,7 +5,7 @@ using net.Models;
 
 namespace net.Controllers;
 
-//[Authorize]
+[Authorize]
 public class MultaController : Controller
 {
     private readonly ILogger<MultaController> _logger;
@@ -16,6 +16,7 @@ public class MultaController : Controller
         _logger = logger;
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         if (id == 0)
@@ -27,6 +28,7 @@ public class MultaController : Controller
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Generar(int contratoId, DateTime fechaTerminacion)
     {
         var repoContrato = new RepositorioContrato();

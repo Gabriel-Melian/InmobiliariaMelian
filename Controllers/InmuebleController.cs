@@ -5,7 +5,7 @@ using net.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;//Para trabajar con listas desplegables (SelectList)
 
 namespace net.Controllers;
-//[Authorize]
+[Authorize]
 public class InmuebleController : Controller
 {
     private readonly ILogger<InmuebleController> _logger;
@@ -47,6 +47,7 @@ public class InmuebleController : Controller
         return View(lista);
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Detalle(int id)
     {
         if (id == 0)
@@ -54,7 +55,7 @@ public class InmuebleController : Controller
         else
         {
             var inmueble = repo.ObtenerUno(id);
-            
+
             var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
             var uso = repoUso.ObtenerUno(inmueble.IdUso);
             var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
@@ -68,6 +69,7 @@ public class InmuebleController : Controller
         }
     }
 
+    [Authorize(Roles = "Empleado")]
     public IActionResult Edicion(int id)
     {
         var inmueble = id == 0 ? new Inmueble() : repo.ObtenerUno(id);
@@ -94,6 +96,7 @@ public class InmuebleController : Controller
         return View(inmueble);
     }
 
+    [Authorize(Roles = "Empleado")]
     [HttpPost]
     public IActionResult Guardar(Inmueble inmueble)
     {
@@ -117,6 +120,7 @@ public class InmuebleController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Eliminar(int id)//Esto solo lo haria el admin
     {
         //if(!User.IsInRole("Administrador")){//Falta autenticacion
@@ -133,13 +137,14 @@ public class InmuebleController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Administrador")]
     public IActionResult Activar(int id)//Esto solo lo haria el admin
     {
         //if(!User.IsInRole("Administrador")){//Falta autenticacion
         //TempData["Error"] = "Acceso denegado";
         //return Redirect("/Home/Index");
         //}
-        if(!Verificaciones(id))
+        if (!Verificaciones(id))
             return RedirectToAction("Index");
 
         int res = repo.Restore(id);
