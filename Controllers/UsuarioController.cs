@@ -26,13 +26,22 @@ public class UsuarioController : Controller
         var usuario = repo.ObtenerPorEmail(model.Email);
         //string hashed = BCrypt.Net.BCrypt.HashPassword("misipi");
         //string hashed2 = BCrypt.Net.BCrypt.HashPassword("judi");
+        //string hashed3 = BCrypt.Net.BCrypt.HashPassword("pinesamo21");
         //Console.WriteLine($"Hashed password: {hashed}");
         //Console.WriteLine($"Hashed password 2: {hashed2}");
+        //Console.WriteLine($"Hashed password 3: {hashed3}");
 
         //Aunque la BD tire un hash distinto cada vez (por el salt aleatorio), el Verify sabe validar y comparar
         if (usuario == null || !BCrypt.Net.BCrypt.Verify(model.Password, usuario.Password))
         {
             ModelState.AddModelError(string.Empty, "Usuario o contraseña inválidos");
+            return View(model);
+        }
+
+        //Verificacion de estado (solo empleados)
+        if (usuario.RolEnum == Usuario.Roles.Empleado && usuario.Estado == 0)
+        {
+            ModelState.AddModelError(string.Empty, "El usuario está inactivo, contacte al administrador.");
             return View(model);
         }
 

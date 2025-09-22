@@ -1,3 +1,7 @@
 Admin -> Gabriell86@gmail.com     misipi
 
 Empleado -> Drope@gmail.com       judi
+
+Empleado -> Franco27@gmail.com    pinesamo21
+
+INSERT INTO `usuario`( `nombre`, `apellido`, `email`, `password`, `rol`, `dni`, `avatar`) VALUES ('Franco','Lucero','Franco27@gmail.com','pinesamo21',2,'42758490',Null)
